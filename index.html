@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>LINE予約 | ABEE三鷹店</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ローディングオーバーレイ -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- トースト通知 -->
+<div id="toast" class="toast" role="alert"></div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面①  初回登録 — ガイダンス
+══════════════════════════════════════════════ -->
+<div id="screen-register" class="screen">
+  <header class="header">
+    <span class="header__icon">🏠</span>
+    <span class="header__title">LINE予約　初回利用登録</span>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <p style="font-size:14px; line-height:1.8; margin-bottom:14px;">
+        ABEE三鷹店のオンライン来店予約の<br>ご利用登録画面です。
+      </p>
+      <p style="font-size:13px; color:#666; margin-bottom:12px;">
+        下記の方はご利用いただけません。<br>お手数ですが店舗までお電話ください。
+      </p>
+      <div class="notice-box">
+        <ul>
+          <li>当店へのご来店が始めての方</li>
+          <li>トリマー指名をご希望の方</li>
+          <li>大型犬・多頭飼いの方</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="btn btn--primary" onclick="document.getElementById('screen-register').classList.remove('active'); document.getElementById('screen-register-form').classList.add('active');">
+      初回登録へ進む
+    </button>
+
+    <div class="shop-info">
+      <strong>ABEE 三鷹店（TEL：<a href="tel:0422-30-5392">0422-30-5392</a>）</strong>
+      〒190-0013 東京都立川市富士見町2-12-9 富士見マンション101
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面②  初回登録 — 電話番号入力
+══════════════════════════════════════════════ -->
+<div id="screen-register-form" class="screen">
+  <header class="header">
+    <span class="header__icon">🏠</span>
+    <span class="header__title">LINE予約　初回利用登録</span>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <p style="font-size:14px; margin-bottom:16px; line-height:1.7;">
+        下記入力欄から登録してください
+      </p>
+      <div class="form-group">
+        <label class="form-label" for="input-tel">携帯電話番号を入力してください。</label>
+        <input
+          id="input-tel"
+          class="form-input"
+          type="tel"
+          inputmode="numeric"
+          placeholder="09012345678"
+          maxlength="11"
+          autocomplete="tel"
+        >
+      </div>
+      <p style="font-size:12px; color:#999; margin-top:8px;">
+        ※ ハイフンなしで入力してください
+      </p>
+    </div>
+
+    <button class="btn btn--primary" onclick="App.handleRegister()">進む</button>
+
+    <div class="shop-info">
+      <strong>ABEE 三鷹店（TEL：<a href="tel:0422-30-5392">0422-30-5392</a>）</strong>
+      〒190-0013 東京都立川市富士見町2-12-9 富士見マンション101
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面③  初回登録 — 完了
+══════════════════════════════════════════════ -->
+<div id="screen-register-done" class="screen">
+  <header class="header">
+    <span class="header__icon">🏠</span>
+    <span class="header__title">LINE予約　初回利用登録</span>
+  </header>
+
+  <div class="content" style="justify-content:center; gap:24px;">
+    <div class="done-icon">✅</div>
+    <p class="done-title">初回登録が完了しました。</p>
+    <p class="done-msg">次回からはこちらの画面から<br>予約が可能になります。</p>
+    <button class="btn btn--primary" onclick="App.loadHome()">予約画面へ進む</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面④  ホーム（予約一覧）
+══════════════════════════════════════════════ -->
+<div id="screen-home" class="screen">
+  <header class="header">
+    <span class="header__icon">🏠</span>
+    <span class="header__title">LINE予約</span>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <p class="section-title">現在のご予約</p>
+      <div id="reservation-list">
+        <p class="empty-msg">読み込み中...</p>
+      </div>
+    </div>
+
+    <button class="btn btn--primary" onclick="App.openPetSelect()">新規予約</button>
+
+    <div class="notice-box">
+      <p>下記をご希望のお客様はお電話ください。</p>
+      <ul>
+        <li>トリマー指名をご希望の方</li>
+        <li>大型犬・多頭飼いの方</li>
+      </ul>
+    </div>
+
+    <div class="shop-info">
+      <strong>ABEE 三鷹店（TEL：<a href="tel:0422-30-5392">0422-30-5392</a>）</strong>
+      〒190-0013 東京都立川市富士見町2-12-9 富士見マンション101
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面⑤  ペット選択
+══════════════════════════════════════════════ -->
+<div id="screen-pet-select" class="screen">
+  <header class="header">
+    <span class="header__icon">🏠</span>
+    <span class="header__title">LINE予約</span>
+    <span class="header__sub">ペット選択</span>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <p class="section-title">予約するペットを選択</p>
+      <div class="form-group" style="margin-top:12px;">
+        <label class="form-label" for="select-pet">ペット</label>
+        <select id="select-pet" class="form-select">
+          <!-- app.jsで動的生成 -->
+        </select>
+      </div>
+    </div>
+
+    <button class="btn btn--primary" onclick="App.handlePetSelect()">日程を選ぶ</button>
+    <button class="btn btn--ghost" onclick="App.loadHome()">← 戻る</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面⑥  日程・時間選択カレンダー
+══════════════════════════════════════════════ -->
+<div id="screen-calendar" class="screen">
+  <header class="header">
+    <span class="header__icon">🏠</span>
+    <span class="header__title">LINE予約</span>
+    <span class="header__sub">日付選択</span>
+  </header>
+
+  <div class="content">
+    <div class="card" style="padding:14px 12px;">
+      <div class="cal-header">
+        <button class="btn-week" onclick="App.prevWeek()">前週</button>
+        <span class="cal-week-label" id="cal-week-label"></span>
+        <button class="btn-week" onclick="App.nextWeek()">翌週</button>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="cal-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>10:00</th>
+              <th>13:00</th>
+              <th>16:00</th>
+            </tr>
+          </thead>
+          <tbody id="cal-tbody">
+            <!-- app.jsで動的生成 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="notice-box">
+      <p>下記をご希望のお客様はお電話ください。</p>
+      <ul>
+        <li>トリマー指名をご希望の方</li>
+        <li>大型犬・多頭飼いの方</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <button class="btn btn--ghost" onclick="App.loadHome()">← ホームへ戻る</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面⑦  予約情報入力フォーム
+══════════════════════════════════════════════ -->
+<div id="screen-booking" class="screen">
+  <header class="header">
+    <span class="header__icon">🏠</span>
+    <span class="header__title">LINE予約</span>
+    <span class="header__sub">予約内容</span>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <p class="section-title" id="form-header"></p>
+
+      <dl class="booking-summary" style="margin-top:12px;">
+        <dt>ペット</dt>
+        <dd id="form-pet-name">—</dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label class="form-label" for="select-menu">施術メニュー</label>
+        <select id="select-menu" class="form-select">
+          <!-- app.jsで動的生成 -->
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label" for="input-notes">ご要望・備考（任意）</label>
+        <textarea id="input-notes" class="form-textarea" placeholder="気になることがあればお書きください"></textarea>
+      </div>
+    </div>
+
+    <button class="btn btn--primary" onclick="App.handleBooking()">予約する</button>
+    <button class="btn btn--ghost" onclick="App.openPetSelect()">← 日程選択へ戻る</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面⑧  予約完了
+══════════════════════════════════════════════ -->
+<div id="screen-booking-done" class="screen">
+  <header class="header">
+    <span class="header__icon">🏠</span>
+    <span class="header__title">LINE予約</span>
+  </header>
+
+  <div class="content" style="justify-content:center; gap:20px;">
+    <div class="done-icon">🐾</div>
+    <p class="done-title">予約が完了しました！</p>
+    <div class="booking-summary">
+      <dt>予約内容</dt>
+      <dd id="confirm-detail">—</dd>
+    </div>
+    <p class="done-msg">当日はよろしくお願いいたします。<br>キャンセルはお電話でご連絡ください。</p>
+
+    <button class="btn btn--primary" onclick="App.loadHome()">ホームへ戻る</button>
+
+    <div class="shop-info">
+      <strong>ABEE 三鷹店（TEL：<a href="tel:0422-30-5392">0422-30-5392</a>）</strong>
+      〒190-0013 東京都立川市富士見町2-12-9 富士見マンション101
+    </div>
+  </div>
+</div>
+
+
+<!-- ── スクリプト ─────────────────────────── -->
+<!-- LIFF SDK（LIFF IDが設定されたら有効にする） -->
+<!-- <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script> -->
+
+<!-- LIFF IDがない間のスタブ -->
+<script>
+  if (typeof liff === 'undefined') {
+    window.liff = {
+      init: () => Promise.resolve(),
+      isLoggedIn: () => true,
+      getProfile: () => Promise.resolve({ userId: 'Uf1234567890mock', displayName: 'テストユーザー' }),
+      login: () => {},
+      closeWindow: () => {},
+    };
+  }
+</script>
+
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
