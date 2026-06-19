@@ -81,11 +81,11 @@ html, body {
   padding: 0;
   margin-right: 6px;
   cursor: pointer;
-  color: var(--red); /* ヘッダー背景色と同色 */
+  color: #F5E8E8; /* var(--red-light) ヘッダー背景の薄い色 */
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  opacity: 0.85;
+  opacity: 0.9;
   transition: opacity 0.15s;
 }
 .header__home-btn:active { opacity: 0.6; }
