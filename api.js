@@ -92,14 +92,16 @@ const API = (() => {
   const registerLineUser = async (lineUserId, tel) => {
     if (_isMock()) {
       await _delay(500);
-      // 電話番号で顧客を探す
       const customer = _mock.customers.find(c => c.tel === tel);
-      if (!customer) {
-        return { success: false, message: '登録されている電話番号が見つかりませんでした。' };
+      if (customer) {
+        // 顧客テーブルに電話番号あり → 正常に紐付け
+        _mock.lineUsers.push({ lineUserId, tel, customerId: customer.id });
+        return { success: true, customerId: customer.id };
+      } else {
+        // 電話番号がテーブルにない → LINE利用テーブルへの登録のみ（店頭で紐付け）
+        _mock.lineUsers.push({ lineUserId, tel, customerId: null, pendingLinkage: true });
+        return { success: false, pendingLinkage: true };
       }
-      // LINE利用テーブルに追加
-      _mock.lineUsers.push({ lineUserId, tel, customerId: customer.id });
-      return { success: true, customerId: customer.id };
     }
     return _fetch('/line-users', {
       method: 'POST',

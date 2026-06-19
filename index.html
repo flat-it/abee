@@ -22,7 +22,11 @@
 ══════════════════════════════════════════════ -->
 <div id="screen-register" class="screen">
   <header class="header">
-    <span class="header__icon">🏠</span>
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
     <span class="header__title">LINE予約　初回利用登録</span>
   </header>
 
@@ -43,7 +47,7 @@
       </div>
     </div>
 
-    <button class="btn btn--primary" onclick="document.getElementById('screen-register').classList.remove('active'); document.getElementById('screen-register-form').classList.add('active');">
+    <button class="btn btn--primary" onclick="showScreen('screen-terms')">
       初回登録へ進む
     </button>
 
@@ -56,11 +60,102 @@
 
 
 <!-- ══════════════════════════════════════════════
-     画面②  初回登録 — 電話番号入力
+     画面②  利用規約
+══════════════════════════════════════════════ -->
+<div id="screen-terms" class="screen">
+  <header class="header">
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
+    <span class="header__title">LINE予約　初回利用登録</span>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <p style="font-size:14px; font-weight:600; margin-bottom:12px;">利用規約をご確認ください</p>
+      <div class="terms-box">
+        <h3>LINEアプリ利用規約</h3>
+        <p>本サービスは、ABEEペットサロン（以下「当店」）が提供するLINEミニアプリ（以下「本アプリ」）を通じたオンライン予約サービスです。ご利用の前に以下の規約をお読みください。</p>
+
+        <h4>第1条（サービス内容）</h4>
+        <p>本アプリは、当店へのトリミング等の施術予約をLINE上から行うためのサービスです。予約の確定は当店での受付完了をもって成立します。</p>
+
+        <h4>第2条（利用資格）</h4>
+        <p>本サービスは、当店に既にご登録いただいているお客様のみご利用いただけます。初めてご来店の方、トリマー指名をご希望の方、大型犬・多頭飼いの方は、お電話にてご予約ください。</p>
+
+        <h4>第3条（個人情報の取り扱い）</h4>
+        <p>ご登録いただいた氏名・電話番号・ペット情報等の個人情報は、予約管理・サービス提供のみに使用します。第三者への提供は法令に基づく場合を除き行いません。</p>
+
+        <h4>第4条（LINEユーザー情報）</h4>
+        <p>本アプリはLINEのユーザーID取得を行います。取得した情報はお客様の予約情報との紐付けにのみ使用し、マーケティング等の目的には使用しません。</p>
+
+        <h4>第5条（予約のキャンセル）</h4>
+        <p>予約のキャンセルは、予約日の前日までに当店へお電話にてご連絡ください。当日のキャンセルはご遠慮ください。</p>
+
+        <h4>第6条（免責事項）</h4>
+        <p>通信障害・システム障害等によりサービスが利用できない場合、当店は責任を負いかねます。重要なご予約はお電話にてご確認ください。</p>
+
+        <h4>第7条（規約の変更）</h4>
+        <p>当店は予告なく本規約を変更することがあります。変更後も本サービスをご利用いただいた場合、変更後の規約に同意いただいたものとみなします。</p>
+      </div>
+
+      <label class="checkbox-label" style="margin-top:16px;">
+        <input type="checkbox" id="terms-agree" onchange="App.onTermsChange()">
+        <span>同意する</span>
+      </label>
+    </div>
+
+    <button class="btn btn--primary" id="btn-terms-next" disabled onclick="showScreen('screen-password')">進む</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面③  初回登録パスワード
+══════════════════════════════════════════════ -->
+<div id="screen-password" class="screen">
+  <header class="header">
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
+    <span class="header__title">LINE予約　初回利用登録</span>
+  </header>
+
+  <div class="content" style="justify-content:center;">
+    <div class="card">
+      <p style="font-size:14px; text-align:center; line-height:1.8; margin-bottom:16px;">
+        初回利用登録パスワードを<br>入力してください
+      </p>
+      <div class="form-group">
+        <input
+          id="input-password"
+          class="form-input"
+          type="password"
+          inputmode="numeric"
+          placeholder="パスワード"
+          autocomplete="off"
+        >
+      </div>
+    </div>
+    <button class="btn btn--primary" onclick="App.handlePassword()">閉じる</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面④  初回登録 — 電話番号入力
 ══════════════════════════════════════════════ -->
 <div id="screen-register-form" class="screen">
   <header class="header">
-    <span class="header__icon">🏠</span>
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
     <span class="header__title">LINE予約　初回利用登録</span>
   </header>
 
@@ -97,29 +192,37 @@
 
 
 <!-- ══════════════════════════════════════════════
-     画面③  初回登録 — 完了
+     画面⑤  初回登録 — 完了
 ══════════════════════════════════════════════ -->
 <div id="screen-register-done" class="screen">
   <header class="header">
-    <span class="header__icon">🏠</span>
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
     <span class="header__title">LINE予約　初回利用登録</span>
   </header>
 
   <div class="content" style="justify-content:center; gap:24px;">
     <div class="done-icon">✅</div>
-    <p class="done-title">初回登録が完了しました。</p>
-    <p class="done-msg">次回からはこちらの画面から<br>予約が可能になります。</p>
+    <p class="done-title" id="register-done-title">初回登録が完了しました。</p>
+    <p class="done-msg" id="register-done-msg">次回からはこちらの画面から<br>予約が可能になります。</p>
     <button class="btn btn--primary" onclick="App.loadHome()">予約画面へ進む</button>
   </div>
 </div>
 
 
 <!-- ══════════════════════════════════════════════
-     画面④  ホーム（予約一覧）
+     画面⑥  ホーム（予約一覧）
 ══════════════════════════════════════════════ -->
 <div id="screen-home" class="screen">
   <header class="header">
-    <span class="header__icon">🏠</span>
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
     <span class="header__title">LINE予約</span>
   </header>
 
@@ -150,11 +253,15 @@
 
 
 <!-- ══════════════════════════════════════════════
-     画面⑤  ペット選択
+     画面⑦  ペット選択
 ══════════════════════════════════════════════ -->
 <div id="screen-pet-select" class="screen">
   <header class="header">
-    <span class="header__icon">🏠</span>
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
     <span class="header__title">LINE予約</span>
     <span class="header__sub">ペット選択</span>
   </header>
@@ -164,9 +271,7 @@
       <p class="section-title">予約するペットを選択</p>
       <div class="form-group" style="margin-top:12px;">
         <label class="form-label" for="select-pet">ペット</label>
-        <select id="select-pet" class="form-select">
-          <!-- app.jsで動的生成 -->
-        </select>
+        <select id="select-pet" class="form-select"></select>
       </div>
     </div>
 
@@ -177,11 +282,15 @@
 
 
 <!-- ══════════════════════════════════════════════
-     画面⑥  日程・時間選択カレンダー
+     画面⑧  日程・時間選択カレンダー
 ══════════════════════════════════════════════ -->
 <div id="screen-calendar" class="screen">
   <header class="header">
-    <span class="header__icon">🏠</span>
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
     <span class="header__title">LINE予約</span>
     <span class="header__sub">日付選択</span>
   </header>
@@ -193,7 +302,6 @@
         <span class="cal-week-label" id="cal-week-label"></span>
         <button class="btn-week" onclick="App.nextWeek()">翌週</button>
       </div>
-
       <div style="overflow-x:auto;">
         <table class="cal-table">
           <thead>
@@ -204,9 +312,7 @@
               <th>16:00</th>
             </tr>
           </thead>
-          <tbody id="cal-tbody">
-            <!-- app.jsで動的生成 -->
-          </tbody>
+          <tbody id="cal-tbody"></tbody>
         </table>
       </div>
     </div>
@@ -227,11 +333,15 @@
 
 
 <!-- ══════════════════════════════════════════════
-     画面⑦  予約情報入力フォーム
+     画面⑨  予約情報入力フォーム
 ══════════════════════════════════════════════ -->
 <div id="screen-booking" class="screen">
   <header class="header">
-    <span class="header__icon">🏠</span>
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
     <span class="header__title">LINE予約</span>
     <span class="header__sub">予約内容</span>
   </header>
@@ -239,7 +349,6 @@
   <div class="content">
     <div class="card">
       <p class="section-title" id="form-header"></p>
-
       <dl class="booking-summary" style="margin-top:12px;">
         <dt>ペット</dt>
         <dd id="form-pet-name">—</dd>
@@ -249,11 +358,8 @@
     <div class="card">
       <div class="form-group">
         <label class="form-label" for="select-menu">施術メニュー</label>
-        <select id="select-menu" class="form-select">
-          <!-- app.jsで動的生成 -->
-        </select>
+        <select id="select-menu" class="form-select"></select>
       </div>
-
       <div class="form-group" style="margin-top:14px;">
         <label class="form-label" for="input-notes">ご要望・備考（任意）</label>
         <textarea id="input-notes" class="form-textarea" placeholder="気になることがあればお書きください"></textarea>
@@ -267,11 +373,15 @@
 
 
 <!-- ══════════════════════════════════════════════
-     画面⑧  予約完了
+     画面⑩  予約完了
 ══════════════════════════════════════════════ -->
 <div id="screen-booking-done" class="screen">
   <header class="header">
-    <span class="header__icon">🏠</span>
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
     <span class="header__title">LINE予約</span>
   </header>
 
@@ -283,9 +393,7 @@
       <dd id="confirm-detail">—</dd>
     </div>
     <p class="done-msg">当日はよろしくお願いいたします。<br>キャンセルはお電話でご連絡ください。</p>
-
     <button class="btn btn--primary" onclick="App.loadHome()">ホームへ戻る</button>
-
     <div class="shop-info">
       <strong>ABEE 三鷹店（TEL：<a href="tel:0422-30-5392">0422-30-5392</a>）</strong>
       〒190-0013 東京都立川市富士見町2-12-9 富士見マンション101
@@ -298,7 +406,6 @@
 <!-- LIFF SDK（LIFF IDが設定されたら有効にする） -->
 <!-- <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script> -->
 
-<!-- LIFF IDがない間のスタブ -->
 <script>
   if (typeof liff === 'undefined') {
     window.liff = {
@@ -308,6 +415,13 @@
       login: () => {},
       closeWindow: () => {},
     };
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+    window.scrollTo(0, 0);
   }
 </script>
 

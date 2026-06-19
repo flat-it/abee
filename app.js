@@ -103,6 +103,26 @@ const App = (() => {
     }
   };
 
+  // ── 利用規約チェックボックス ──────────────────────────────
+  const onTermsChange = () => {
+    const agreed = document.getElementById('terms-agree').checked;
+    document.getElementById('btn-terms-next').disabled = !agreed;
+  };
+
+  // ── パスワード確認 ────────────────────────────────────────
+  const REGISTER_PASSWORD = 'ABEE2026';
+
+  const handlePassword = () => {
+    const input = document.getElementById('input-password').value;
+    if (input !== REGISTER_PASSWORD) {
+      showToast('パスワードが違います。', 'error');
+      document.getElementById('input-password').value = '';
+      return;
+    }
+    document.getElementById('input-password').value = '';
+    showScreen('screen-register-form');
+  };
+
   // ── 初回登録 ──────────────────────────────────────────────
   const handleRegister = async () => {
     const tel = document.getElementById('input-tel').value.trim().replace(/[-\s]/g, '');
@@ -114,7 +134,16 @@ const App = (() => {
     try {
       const result = await API.registerLineUser(state.lineUserId, tel);
       if (result.success) {
+        // 顧客テーブルに電話番号が見つかった → 正常に紐付け完了
         state.customerId = result.customerId;
+        document.getElementById('register-done-title').textContent = '初回登録が完了しました。';
+        document.getElementById('register-done-msg').textContent = '次回からはこちらの画面から予約が可能になります。';
+        showScreen('screen-register-done');
+      } else if (result.pendingLinkage) {
+        // 電話番号がテーブルにない → LINE利用テーブルへの登録のみ完了、店頭で紐付け
+        document.getElementById('register-done-title').textContent = '仮登録が完了しました。';
+        document.getElementById('register-done-msg').textContent =
+          'ご来店時にスタッフへお声がけください。\n店頭でお客様情報との紐付けを行います。';
         showScreen('screen-register-done');
       } else {
         showToast(result.message || '登録に失敗しました。', 'error');
@@ -301,6 +330,8 @@ const App = (() => {
   return {
     init: initLiff,
     handleRegister,
+    handlePassword,
+    onTermsChange,
     handlePetSelect,
     selectSlot,
     prevWeek,
