@@ -28,22 +28,14 @@ const API = (() => {
     kartes: [
       {
         id: 'K001', customerId: 'C001', petId: 'P001',
-        date: '2025-06-15', time: '10:00', menu: 'シャンプーカット',
+        date: '2025-06-15', time: '10:00',
         status: 'confirmed',
       },
       {
         id: 'K002', customerId: 'C001', petId: 'P002',
-        date: '2025-07-01', time: '13:00', menu: 'シャンプーのみ',
+        date: '2025-07-01', time: '13:00',
         status: 'confirmed',
       },
-    ],
-
-    // C_AB_メニューテーブル
-    menus: [
-      { id: 'M001', name: 'シャンプーカット', price: '¥6,000〜' },
-      { id: 'M002', name: 'シャンプーのみ',   price: '¥3,500〜' },
-      { id: 'M003', name: 'カットのみ',       price: '¥4,000〜' },
-      { id: 'M004', name: 'トリミング（フルコース）', price: '¥8,000〜' },
     ],
 
     // 予約済みスロット（日付+時間 → 予約数）
@@ -164,7 +156,7 @@ const API = (() => {
           for (const t of CONFIG.TIME_SLOTS) {
             const key = `${dateStr}_${t}`;
             const count = _mock.reservedSlots[key] || 0;
-            slots[dateStr][t] = count < 2; // 2枠まで予約可能
+            slots[dateStr][t] = count < 1; // 1件でも予約があればその時間帯は満枠
           }
         }
       }
@@ -178,30 +170,20 @@ const API = (() => {
    * @param {Object} params
    * @returns {{ success: boolean, karteId?: string }}
    */
-  const createReservation = async ({ customerId, petId, date, time, menu, notes }) => {
+  const createReservation = async ({ customerId, petId, date, time, notes }) => {
     if (_isMock()) {
       await _delay(600);
       const id = 'K' + Date.now();
-      _mock.kartes.push({ id, customerId, petId, date, time, menu, notes, status: 'confirmed' });
+      _mock.kartes.push({ id, customerId, petId, date, time, notes, status: 'confirmed' });
       const key = `${date}_${time}`;
       _mock.reservedSlots[key] = (_mock.reservedSlots[key] || 0) + 1;
       return { success: true, karteId: id };
     }
     return _fetch('/kartes', {
       method: 'POST',
-      body: JSON.stringify({ customerId, petId, date, time, menu, notes }),
+      body: JSON.stringify({ customerId, petId, date, time, notes }),
     });
   };
 
-  // ── メニュー ───────────────────────────────────────────────
-
-  const getMenus = async () => {
-    if (_isMock()) {
-      await _delay();
-      return _mock.menus;
-    }
-    return _fetch('/menus');
-  };
-
-  return { findLineUser, registerLineUser, getPets, getReservations, getAvailableSlots, createReservation, getMenus };
+  return { findLineUser, registerLineUser, getPets, getReservations, getAvailableSlots, createReservation };
 })();

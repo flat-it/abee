@@ -14,7 +14,6 @@ const App = (() => {
     selectedTime: null,
     currentWeekStart: null, // 表示中の週の月曜日
     availableSlots: {},
-    menus: [],
   };
 
   // ── ユーティリティ ────────────────────────────────────────
@@ -159,13 +158,11 @@ const App = (() => {
   const loadHome = async () => {
     showLoading(true);
     try {
-      const [reservations, pets, menus] = await Promise.all([
+      const [reservations, pets] = await Promise.all([
         API.getReservations(state.customerId),
         API.getPets(state.customerId),
-        API.getMenus(),
       ]);
       state.pets = pets;
-      state.menus = menus;
       renderHome(reservations, pets);
       showScreen('screen-home');
     } catch (err) {
@@ -187,7 +184,6 @@ const App = (() => {
             <div class="reservation-date">${fmt.date(k.date)} ${k.time}</div>
             <div class="reservation-detail">
               <span class="pet-name">${pet ? pet.petName : '—'}</span>
-              <span class="menu-name">${k.menu}</span>
             </div>
           </div>`;
       }).join('');
@@ -288,19 +284,11 @@ const App = (() => {
     document.getElementById('form-pet-name').textContent =
       pet ? `${pet.petName}（${pet.breed || ''}）` : '—';
 
-    // メニュー選択肢
-    const menuSel = document.getElementById('select-menu');
-    menuSel.innerHTML = state.menus.map(m =>
-      `<option value="${m.name}">${m.name}　${m.price || ''}</option>`
-    ).join('');
-
     showScreen('screen-booking');
   };
 
   const handleBooking = async () => {
-    const menu = document.getElementById('select-menu').value;
     const notes = document.getElementById('input-notes').value.trim();
-    if (!menu) { showToast('メニューを選択してください。', 'error'); return; }
 
     showLoading(true);
     try {
@@ -309,12 +297,11 @@ const App = (() => {
         petId: state.selectedPetId,
         date: state.selectedDate,
         time: state.selectedTime,
-        menu,
         notes,
       });
       if (result.success) {
         document.getElementById('confirm-detail').textContent =
-          `${fmt.date(state.selectedDate)} ${state.selectedTime} / ${menu}`;
+          `${fmt.date(state.selectedDate)} ${state.selectedTime}`;
         showScreen('screen-booking-done');
       } else {
         showToast('予約に失敗しました。', 'error');
