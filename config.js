@@ -5,7 +5,7 @@
 
 const CONFIG = {
   // LIFF IDを取得後にここへ貼り付ける
-  LIFF_ID: 'YOUR_LIFF_ID_HERE',
+  LIFF_ID: '2010455608-5xKvmKL7',
 
   // Losicapps APIエンドポイント（後で実URLに差し替え）
   // 例: 'https://api.losicapps.com/v1/your-app'

@@ -399,10 +399,11 @@
 
 
 <!-- ── スクリプト ─────────────────────────── -->
-<!-- LIFF SDK（LIFF IDが設定されたら有効にする） -->
-<!-- <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script> -->
+<!-- LIFF SDK -->
+<script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
 
 <script>
+  // LINEアプリ外（PCブラウザ等）で開いた場合の保険用モック
   if (typeof liff === 'undefined') {
     window.liff = {
       init: () => Promise.resolve(),
