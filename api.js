@@ -1,59 +1,38 @@
 // ============================================================
-// api.js — Losicapps API ラッパー
+// api.js — Logic App API ラッパー
 // CONFIG.API_BASE_URL が 'MOCK' の場合はモックデータを返す
-// 実URLに差し替えると本番APIを呼び出す
 // ============================================================
 
 const API = (() => {
 
   // ── モックデータ ──────────────────────────────────────────
   const _mock = {
-    // C_AB_LINE利用テーブル（電話番号 → LINE利用者の紐付け）
-    lineUsers: [
-      // { lineUserId, tel, customerId }
-    ],
-
-    // C_AB_顧客テーブル（簡易）
+    lineUsers: [],
     customers: [
       { id: 'C001', name: '田中 花子', tel: '09012345678' },
     ],
-
-    // C_AB_ペットテーブル
     pets: [
       { id: 'P001', customerId: 'C001', petName: 'ポチ', breed: 'トイプードル' },
       { id: 'P002', customerId: 'C001', petName: 'モモ', breed: 'チワワ' },
     ],
-
-    // C_AB_カルテテーブル（予約情報）
     kartes: [
-      {
-        id: 'K001', customerId: 'C001', petId: 'P001',
-        date: '2025-06-15', time: '10:00',
-        status: 'confirmed',
-      },
-      {
-        id: 'K002', customerId: 'C001', petId: 'P002',
-        date: '2025-07-01', time: '13:00',
-        status: 'confirmed',
-      },
+      { id: 'K001', customerId: 'C001', petId: 'P001', date: '2025-06-15', time: '10:00' },
+      { id: 'K002', customerId: 'C001', petId: 'P002', date: '2025-07-01', time: '13:00' },
     ],
-
-    // 予約済みスロット（日付+時間 → 予約数）
-    reservedSlots: {
-      // 'YYYY-MM-DD_HH:MM': count
-    },
+    reservedSlots: {},
   };
 
   // ── ヘルパー ──────────────────────────────────────────────
   const _isMock = () => CONFIG.API_BASE_URL === 'MOCK';
 
-  const _fetch = async (path, options = {}) => {
-    const url = `${CONFIG.API_BASE_URL}${path}`;
-    const res = await fetch(url, {
+  // Logic App は全て同じURLにPOST、actionをbodyに含める
+  const _fetch = async (params) => {
+    const res = await fetch(CONFIG.API_BASE_URL, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      ...options,
+      body: JSON.stringify(params),
     });
-    if (!res.ok) throw new Error(`API Error: ${res.status} ${path}`);
+    if (!res.ok) throw new Error(`API Error: ${res.status}`);
     return res.json();
   };
 
@@ -61,68 +40,42 @@ const API = (() => {
 
   // ── LINE利用者 ─────────────────────────────────────────────
 
-  /**
-   * LINE利用者を電話番号で検索
-   * @param {string} lineUserId
-   * @returns {{ found: boolean, customerId?: string }}
-   */
   const findLineUser = async (lineUserId) => {
     if (_isMock()) {
       await _delay();
       const user = _mock.lineUsers.find(u => u.lineUserId === lineUserId);
       return user ? { found: true, customerId: user.customerId } : { found: false };
     }
-    return _fetch(`/line-users/${lineUserId}`);
+    return _fetch({ action: 'findLineUser', lineUserId });
   };
 
-  /**
-   * 初回登録：電話番号でC_AB_顧客を検索しC_AB_LINE利用に登録
-   * @param {string} lineUserId
-   * @param {string} tel
-   * @returns {{ success: boolean, customerId?: string, message?: string }}
-   */
   const registerLineUser = async (lineUserId, tel) => {
     if (_isMock()) {
       await _delay(500);
       const customer = _mock.customers.find(c => c.tel === tel);
       if (customer) {
-        // 顧客テーブルに電話番号あり → 正常に紐付け
         _mock.lineUsers.push({ lineUserId, tel, customerId: customer.id });
         return { success: true, customerId: customer.id };
       } else {
-        // 電話番号がテーブルにない → LINE利用テーブルへの登録のみ（店頭で紐付け）
         _mock.lineUsers.push({ lineUserId, tel, customerId: null, pendingLinkage: true });
         return { success: false, pendingLinkage: true };
       }
     }
-    return _fetch('/line-users', {
-      method: 'POST',
-      body: JSON.stringify({ lineUserId, tel }),
-    });
+    return _fetch({ action: 'registerLineUser', lineUserId, tel });
   };
 
   // ── ペット ─────────────────────────────────────────────────
 
-  /**
-   * 顧客IDでペット一覧を取得
-   * @param {string} customerId
-   * @returns {Array<{ id, petName, breed }>}
-   */
   const getPets = async (customerId) => {
     if (_isMock()) {
       await _delay();
       return _mock.pets.filter(p => p.customerId === customerId);
     }
-    return _fetch(`/pets?customerId=${customerId}`);
+    return _fetch({ action: 'getPets', customerId });
   };
 
   // ── カルテ（予約）─────────────────────────────────────────
 
-  /**
-   * 顧客の予約一覧を取得（今日以降）
-   * @param {string} customerId
-   * @returns {Array<karte>}
-   */
   const getReservations = async (customerId) => {
     if (_isMock()) {
       await _delay();
@@ -131,14 +84,9 @@ const API = (() => {
         .filter(k => k.customerId === customerId && k.date >= today)
         .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
     }
-    return _fetch(`/kartes?customerId=${customerId}&from=today`);
+    return _fetch({ action: 'getReservations', customerId });
   };
 
-  /**
-   * 指定週の予約可能スロットを取得
-   * @param {string} weekStartDate  'YYYY-MM-DD'（月曜日）
-   * @returns {Object} { 'YYYY-MM-DD': { 'HH:MM': available(bool) } }
-   */
   const getAvailableSlots = async (weekStartDate) => {
     if (_isMock()) {
       await _delay();
@@ -149,40 +97,47 @@ const API = (() => {
         d.setDate(start.getDate() + i);
         const dateStr = d.toISOString().slice(0, 10);
         const dow = d.getDay();
-        if (CONFIG.CLOSED_DAYS.includes(dow)) {
+        if (CONFIG.CLOSED_DAYS && CONFIG.CLOSED_DAYS.includes(dow)) {
           slots[dateStr] = 'closed';
         } else {
           slots[dateStr] = {};
           for (const t of CONFIG.TIME_SLOTS) {
             const key = `${dateStr}_${t}`;
             const count = _mock.reservedSlots[key] || 0;
-            slots[dateStr][t] = count < 1; // 1件でも予約があればその時間帯は満枠
+            slots[dateStr][t] = count < 1;
           }
         }
       }
       return slots;
     }
-    return _fetch(`/available-slots?from=${weekStartDate}`);
+    // Logic Appからは配列で返ってくるのでオブジェクトに変換
+    const result = await _fetch({ action: 'getAvailableSlots', from: weekStartDate });
+    // resultは [{ date, status } or { date, '10:00', '13:00', '16:00' }] の配列
+    const slots = {};
+    for (const item of result) {
+      if (item.status === 'closed') {
+        slots[item.date] = 'closed';
+      } else {
+        slots[item.date] = {
+          '10:00': item['10:00'],
+          '13:00': item['13:00'],
+          '16:00': item['16:00'],
+        };
+      }
+    }
+    return slots;
   };
 
-  /**
-   * 予約を登録（C_AB_カルテに作成）
-   * @param {Object} params
-   * @returns {{ success: boolean, karteId?: string }}
-   */
   const createReservation = async ({ customerId, petId, date, time, notes }) => {
     if (_isMock()) {
       await _delay(600);
       const id = 'K' + Date.now();
-      _mock.kartes.push({ id, customerId, petId, date, time, notes, status: 'confirmed' });
+      _mock.kartes.push({ id, customerId, petId, date, time, notes });
       const key = `${date}_${time}`;
       _mock.reservedSlots[key] = (_mock.reservedSlots[key] || 0) + 1;
       return { success: true, karteId: id };
     }
-    return _fetch('/kartes', {
-      method: 'POST',
-      body: JSON.stringify({ customerId, petId, date, time, notes }),
-    });
+    return _fetch({ action: 'createReservation', customerId, petId, date, time, notes });
   };
 
   return { findLineUser, registerLineUser, getPets, getReservations, getAvailableSlots, createReservation };

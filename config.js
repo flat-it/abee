@@ -1,15 +1,12 @@
 // ============================================================
 // config.js — 設定ファイル
-// LIFF IDとAPIエンドポイントをここで管理する
 // ============================================================
 
 const CONFIG = {
-  // LIFF IDを取得後にここへ貼り付ける
   LIFF_ID: '2010455608-5xKvmKL7',
 
-  // Losicapps APIエンドポイント（後で実URLに差し替え）
-  // 例: 'https://api.losicapps.com/v1/your-app'
-  API_BASE_URL: 'MOCK', // 'MOCK' のままだとモックデータを使用
+  // Logic App エンドポイント
+  API_BASE_URL: 'https://prod-08.japanwest.logic.azure.com:443/workflows/45020ecad453464396fba2ec7e465052/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=B9lrhkwfEK-0ir2kq_mhhg_GpSKBrjsWLOO0La5tVcs',
 
   // 店舗情報
   SHOP: {
@@ -20,7 +17,4 @@ const CONFIG = {
 
   // 予約可能な時間帯
   TIME_SLOTS: ['10:00', '13:00', '16:00'],
-
-  // 定休日（0=日曜, 1=月曜 ...）
-  CLOSED_DAYS: [0, 4], // 日・木を定休日とする例（実際に合わせて変更）
 };
