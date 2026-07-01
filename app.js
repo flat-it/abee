@@ -12,8 +12,9 @@ const App = (() => {
     selectedPetId: null,
     selectedDate: null,
     selectedTime: null,
-    currentWeekStart: null, // 表示中の週の月曜日
+    currentWeekStart: null,
     availableSlots: {},
+    calendarCache: {}, // 週ごとのキャッシュ
   };
 
   // ── ユーティリティ ────────────────────────────────────────
@@ -205,9 +206,21 @@ const App = (() => {
   // ── カレンダー画面 ────────────────────────────────────────
   const loadCalendar = async (monday) => {
     state.currentWeekStart = monday;
+    const weekKey = fmt.toDateStr(monday);
+
+    // キャッシュがあればAPIを呼ばずに表示
+    if (state.calendarCache[weekKey]) {
+      state.availableSlots = state.calendarCache[weekKey];
+      renderCalendar();
+      showScreen('screen-calendar');
+      return;
+    }
+
     showLoading(true);
     try {
-      state.availableSlots = await API.getAvailableSlots(fmt.toDateStr(monday));
+      const slots = await API.getAvailableSlots(weekKey);
+      state.calendarCache[weekKey] = slots; // キャッシュに保存
+      state.availableSlots = slots;
       renderCalendar();
       showScreen('screen-calendar');
     } catch (err) {
@@ -295,6 +308,8 @@ const App = (() => {
         notes,
       });
       if (result.success) {
+        // 予約完了後はキャッシュをクリア（最新の空き状況を反映するため）
+        state.calendarCache = {};
         document.getElementById('confirm-detail').textContent =
           `${fmt.date(state.selectedDate)} ${state.selectedTime}`;
         showScreen('screen-booking-done');
