@@ -1,11 +1,9 @@
 // ============================================================
 // api.js — Logic App API ラッパー
-// CONFIG.API_BASE_URL が 'MOCK' の場合はモックデータを返す
 // ============================================================
 
 const API = (() => {
 
-  // ── モックデータ ──────────────────────────────────────────
   const _mock = {
     lineUsers: [],
     customers: [
@@ -22,10 +20,8 @@ const API = (() => {
     reservedSlots: {},
   };
 
-  // ── ヘルパー ──────────────────────────────────────────────
   const _isMock = () => CONFIG.API_BASE_URL === 'MOCK';
 
-  // Logic App は全て同じURLにPOST、actionをbodyに含める
   const _fetch = async (params) => {
     const res = await fetch(CONFIG.API_BASE_URL, {
       method: 'POST',
@@ -57,8 +53,7 @@ const API = (() => {
         _mock.lineUsers.push({ lineUserId, tel, customerId: customer.id });
         return { success: true, customerId: customer.id };
       } else {
-        _mock.lineUsers.push({ lineUserId, tel, customerId: null, pendingLinkage: true });
-        return { success: false, pendingLinkage: true };
+        return { success: false, notFound: true };
       }
     }
     return _fetch({ action: 'registerLineUser', lineUserId, tel });
@@ -110,9 +105,7 @@ const API = (() => {
       }
       return slots;
     }
-    // Logic Appからは配列で返ってくるのでオブジェクトに変換
     const result = await _fetch({ action: 'getAvailableSlots', from: weekStartDate });
-    // resultは [{ date, status } or { date, '10:00', '13:00', '16:00' }] の配列
     const slots = {};
     for (const item of result) {
       if (item.status === 'closed') {
