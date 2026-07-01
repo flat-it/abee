@@ -105,16 +105,39 @@ const API = (() => {
       }
       return slots;
     }
+
     const result = await _fetch({ action: 'getAvailableSlots', from: weekStartDate });
-    const slots = {};
+
+    // Logic Appの結果（配列）をdateをキーにしたマップに変換
+    const calendarMap = {};
     for (const item of result) {
       if (item.status === 'closed') {
-        slots[item.date] = 'closed';
+        calendarMap[item.date] = 'closed';
       } else {
-        slots[item.date] = {
+        calendarMap[item.date] = {
           '10:00': item['10:00'],
           '13:00': item['13:00'],
           '16:00': item['16:00'],
+        };
+      }
+    }
+
+    // 7日分を補完（カレンダーテーブルにない日は全スロット予約可能として扱う）
+    const slots = {};
+    const start = new Date(weekStartDate);
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      const dateStr = d.toISOString().slice(0, 10);
+      if (calendarMap[dateStr] !== undefined) {
+        // カレンダーテーブルに登録がある日（定休日など）
+        slots[dateStr] = calendarMap[dateStr];
+      } else {
+        // カレンダーテーブルにない日 → 全スロット予約可能
+        slots[dateStr] = {
+          '10:00': true,
+          '13:00': true,
+          '16:00': true,
         };
       }
     }
