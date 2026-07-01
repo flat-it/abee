@@ -68,9 +68,9 @@ const App = (() => {
         console.warn('[DEV] LIFF IDが未設定。モードで動作します。');
         state.lineUserId = 'Uf1234567890mock';
       } else {
-        await liff.init({ liffId: CONFIG.LIFF_ID });
+        await liff.init({ liffId: CONFIG.LIFF_ID, withLoginOnExternalBrowser: true });
         if (!liff.isLoggedIn()) {
-          liff.login();
+          liff.login({ scope: 'profile' });
           return;
         }
         const profile = await liff.getProfile();
