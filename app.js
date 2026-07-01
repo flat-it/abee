@@ -138,7 +138,7 @@ const App = (() => {
         document.getElementById('register-done-msg').textContent = '次回からはこちらの画面から予約が可能になります。';
         showScreen('screen-register-done');
       } else {
-        showToast('登録されている電話番号が見つかりませんでした。お手数ですが店舗までお電話ください。', 'error');
+        showToast('ご登録の電話番号が見つかりませんでした。店頭スタッフにご確認ください。', 'error');
       }
     } catch (err) {
       showToast('通信エラーが発生しました。', 'error');
@@ -238,7 +238,9 @@ const App = (() => {
             <td colspan="${CONFIG.TIME_SLOTS.length}" class="cal-closed">定休日</td>
           </tr>`;
       }
+      const today = new Date().toISOString().slice(0, 10);
       const cells = CONFIG.TIME_SLOTS.map(t => {
+        if (date < today) return `<td class="cal-full">—</td>`;
         const available = daySlots[t];
         if (available === undefined) return `<td class="cal-unavailable">—</td>`;
         return available
