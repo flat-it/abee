@@ -28,8 +28,16 @@ const API = (() => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
     });
-    if (!res.ok) throw new Error(`API Error: ${res.status}`);
-    return res.json();
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`API Error: ${res.status} ${text}`);
+    }
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      throw new Error(`JSON Parse Error: ${text.slice(0, 100)}`);
+    }
   };
 
   const _delay = (ms = 300) => new Promise(r => setTimeout(r, ms));
@@ -106,43 +114,44 @@ const API = (() => {
       return slots;
     }
 
+    // Logic Appからカレンダーとカルテの生データを受け取る
     const result = await _fetch({ action: 'getAvailableSlots', from: weekStartDate });
 
-    // Logic Appの結果（配列）をdateをキーにしたマップに変換
-    const calendarMap = {};
-    for (const item of result) {
-      if (item.status === 'closed') {
-        calendarMap[item.date] = 'closed';
-      } else {
-        calendarMap[item.date] = {
-          '10:00': item['10:00'],
-          '13:00': item['13:00'],
-          '16:00': item['16:00'],
-        };
+    // 予約済みスロットをSetで管理（高速検索）
+    const bookedSlots = new Set();
+    for (const k of (result.kartes || [])) {
+      const dateStr = k.cra25_day ? k.cra25_day.slice(0, 10) : null;
+      const time = k.cra25_time;
+      if (dateStr && time) bookedSlots.add(`${dateStr}_${time}`);
+    }
+
+    // 定休日をSetで管理
+    const closedDates = new Set();
+    for (const c of (result.calendar || [])) {
+      if (c.cra25_holiday) {
+        const dateStr = c.cra25_date ? c.cra25_date.slice(0, 10) : null;
+        if (dateStr) closedDates.add(dateStr);
       }
     }
 
-    // 7日分を補完（カレンダーテーブルにない日は全スロット予約可能として扱う）
+    // 7日分のスロットを生成
     const slots = {};
     const start = new Date(weekStartDate);
     for (let i = 0; i < 7; i++) {
       const d = new Date(start);
       d.setDate(start.getDate() + i);
       const dateStr = d.toISOString().slice(0, 10);
-      if (calendarMap[dateStr] !== undefined) {
-        // カレンダーテーブルに登録がある日（定休日など）
-        slots[dateStr] = calendarMap[dateStr];
+      if (closedDates.has(dateStr)) {
+        slots[dateStr] = 'closed';
       } else {
-        // カレンダーテーブルにない日 → 全スロット予約可能
-        slots[dateStr] = {
-          '10:00': true,
-          '13:00': true,
-          '16:00': true,
-        };
+        slots[dateStr] = {};
+        for (const t of CONFIG.TIME_SLOTS) {
+          slots[dateStr][t] = !bookedSlots.has(`${dateStr}_${t}`);
+        }
       }
     }
     return slots;
-  };
+  };;
 
   const createReservation = async ({ customerId, petId, date, time, notes }) => {
     if (_isMock()) {

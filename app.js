@@ -224,7 +224,7 @@ const App = (() => {
       renderCalendar();
       showScreen('screen-calendar');
     } catch (err) {
-      showToast('空き情報の取得に失敗しました。', 'error');
+      showToast('空き情報の取得に失敗しました: ' + err.message, 'error');
     } finally {
       showLoading(false);
     }
