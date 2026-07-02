@@ -165,5 +165,15 @@ const API = (() => {
     return _fetch({ action: 'createReservation', customerId, petId, date, time, notes });
   };
 
-  return { findLineUser, registerLineUser, getPets, getReservations, getAvailableSlots, createReservation };
+  const cancelReservation = async (karteId) => {
+    if (_isMock()) {
+      await _delay(500);
+      const k = _mock.kartes.find(k => k.id === karteId);
+      if (k) k.cancelled = true;
+      return { success: true };
+    }
+    return _fetch({ action: 'cancelReservation', karteId });
+  };
+
+  return { findLineUser, registerLineUser, getPets, getReservations, getAvailableSlots, createReservation, cancelReservation };
 })();

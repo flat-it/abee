@@ -396,6 +396,78 @@
 </div>
 
 
+<!-- ══════════════════════════════════════════════
+     画面⑪  予約詳細・キャンセル
+══════════════════════════════════════════════ -->
+<div id="screen-reservation-detail" class="screen">
+  <header class="header">
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
+    <span class="header__title">ペットサロンABEE</span>
+    <span class="header__sub">予約詳細</span>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <p class="section-title">予約内容</p>
+      <dl class="booking-summary" style="margin-top:12px;">
+        <dt>日時</dt>
+        <dd id="detail-datetime">—</dd>
+        <dt>ペット</dt>
+        <dd id="detail-pet">—</dd>
+      </dl>
+    </div>
+
+    <div id="cancel-section">
+      <button class="btn btn--secondary" onclick="App.confirmCancel()" id="btn-cancel">
+        予約をキャンセルする
+      </button>
+      <p style="font-size:12px; color:#999; text-align:center; margin-top:8px;">
+        ※ キャンセルは前日17時まで可能です
+      </p>
+    </div>
+
+    <div id="cancel-expired-section" style="display:none;">
+      <div class="notice-box">
+        <p>キャンセル期限（前日17時）を過ぎています。<br>お電話にてご連絡ください。</p>
+      </div>
+    </div>
+
+    <button class="btn btn--ghost" onclick="App.loadHome()">← 戻る</button>
+
+    <div class="shop-info">
+      <strong>ABEE 三鷹店（TEL：<a href="tel:0422-30-5392">0422-30-5392</a>）</strong>
+      〒190-0013 東京都立川市富士見町2-12-9 富士見マンション101
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面⑫  キャンセル完了
+══════════════════════════════════════════════ -->
+<div id="screen-cancel-done" class="screen">
+  <header class="header">
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
+    <span class="header__title">ペットサロンABEE</span>
+  </header>
+
+  <div class="content" style="justify-content:center; gap:20px;">
+    <div class="done-icon">✅</div>
+    <p class="done-title">キャンセルが完了しました</p>
+    <p class="done-msg">またのご予約をお待ちしております。</p>
+    <button class="btn btn--primary" onclick="App.loadHome()">ホームへ戻る</button>
+  </div>
+</div>
+
+
 <!-- ── スクリプト ─────────────────────────── -->
 <!-- LIFF SDK -->
 <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>

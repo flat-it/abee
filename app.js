@@ -10,6 +10,7 @@ const App = (() => {
     customerId: null,
     pets: [],
     selectedPetId: null,
+    selectedKarteId: null,
     selectedDate: null,
     selectedTime: null,
     currentWeekStart: null,
@@ -174,13 +175,66 @@ const App = (() => {
       listEl.innerHTML = reservations.map(k => {
         const pet = pets.find(p => p.id === k.petId);
         return `
-          <div class="reservation-item">
+          <div class="reservation-item" onclick="App.openReservationDetail('${k.id}','${k.date}','${k.time}','${pet ? pet.petName : ''}','${pet ? (pet.breed || '') : ''}')">
             <div class="reservation-date">${fmt.date(k.date)} ${k.time}</div>
             <div class="reservation-detail">
               <span class="pet-name">${pet ? pet.petName : '—'}</span>
             </div>
+            <span style="float:right; color:var(--text-muted); font-size:12px;">詳細 ›</span>
           </div>`;
       }).join('');
+    }
+  };
+
+  // ── 予約詳細 ──────────────────────────────────────────────
+  const openReservationDetail = (karteId, date, time, petName, breed) => {
+    state.selectedKarteId = karteId;
+    state.selectedDate = date;
+    state.selectedTime = time;
+
+    document.getElementById('detail-datetime').textContent = `${fmt.date(date)} ${time}`;
+    document.getElementById('detail-pet').textContent = petName ? `${petName}（${breed}）` : '—';
+
+    // キャンセル期限チェック（前日17時まで）
+    const reservationDate = new Date(date);
+    const deadline = new Date(reservationDate);
+    deadline.setDate(deadline.getDate() - 1);
+    deadline.setHours(17, 0, 0, 0);
+    const now = new Date();
+
+    const cancelSection = document.getElementById('cancel-section');
+    const expiredSection = document.getElementById('cancel-expired-section');
+    if (now < deadline) {
+      cancelSection.style.display = 'block';
+      expiredSection.style.display = 'none';
+    } else {
+      cancelSection.style.display = 'none';
+      expiredSection.style.display = 'block';
+    }
+
+    showScreen('screen-reservation-detail');
+  };
+
+  // ── キャンセル確認 ────────────────────────────────────────
+  const confirmCancel = () => {
+    if (!confirm(`${fmt.date(state.selectedDate)} ${state.selectedTime} の予約をキャンセルしますか？`)) return;
+    handleCancel();
+  };
+
+  const handleCancel = async () => {
+    showLoading(true);
+    try {
+      const result = await API.cancelReservation(state.selectedKarteId);
+      if (result.success) {
+        state.calendarCache = {}; // キャッシュクリア
+        showScreen('screen-cancel-done');
+      } else {
+        showToast('キャンセルに失敗しました。店舗にお電話ください。', 'error');
+      }
+    } catch (err) {
+      showToast('通信エラーが発生しました。', 'error');
+    } finally {
+      showLoading(false);
     }
   };
 
@@ -337,6 +391,8 @@ const App = (() => {
     handleBooking,
     openPetSelect,
     loadHome,
+    openReservationDetail,
+    confirmCancel,
   };
 })();
 
