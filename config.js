@@ -6,7 +6,7 @@ const CONFIG = {
   LIFF_ID: '2010455608-5xKvmKL7',
 
   // Logic App エンドポイント
-  API_BASE_URL: 'https://prod-08.japanwest.logic.azure.com:443/workflows/45020ecad453464396fba2ec7e465052/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=B9lrhkwfEK-0ir2kq_mhhg_GpSKBrjsWLOO0La5tVcs',
+  API_BASE_URL: 'https://prod-24.japanwest.logic.azure.com:443/workflows/f06773ad1b2b423da6c1a507786909e5/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=731W-oP9nHnBbt7Owt3efyqSu5of7ibXCdfDuTVogKU',
 
   // 店舗情報
   SHOP: {
