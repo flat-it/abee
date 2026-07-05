@@ -53,7 +53,7 @@ const API = (() => {
     return _fetch({ action: 'findLineUser', lineUserId });
   };
 
-  const registerLineUser = async (lineUserId, tel) => {
+  const registerLineUser = async (lineUserId, tel, displayName) => {
     if (_isMock()) {
       await _delay(500);
       const customer = _mock.customers.find(c => c.tel === tel);
@@ -64,7 +64,7 @@ const API = (() => {
         return { success: false, notFound: true };
       }
     }
-    return _fetch({ action: 'registerLineUser', lineUserId, tel });
+    return _fetch({ action: 'registerLineUser', lineUserId, tel, displayName });
   };
 
   // ── ペット ─────────────────────────────────────────────────
@@ -98,7 +98,8 @@ const API = (() => {
       for (let i = 0; i < 7; i++) {
         const d = new Date(start);
         d.setDate(start.getDate() + i);
-        const dateStr = d.toISOString().slice(0, 10);
+        const y2 = d.getFullYear(), m2 = String(d.getMonth()+1).padStart(2,'0'), dd2 = String(d.getDate()).padStart(2,'0');
+        const dateStr = `${y2}-${m2}-${dd2}`;
         const dow = d.getDay();
         if (CONFIG.CLOSED_DAYS && CONFIG.CLOSED_DAYS.includes(dow)) {
           slots[dateStr] = 'closed';
@@ -134,13 +135,21 @@ const API = (() => {
       }
     }
 
+    // ローカル日付文字列を返すヘルパー
+    const toLocalDate = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
+
     // 7日分のスロットを生成
     const slots = {};
     const start = new Date(weekStartDate);
     for (let i = 0; i < 7; i++) {
       const d = new Date(start);
       d.setDate(start.getDate() + i);
-      const dateStr = d.toISOString().slice(0, 10);
+      const dateStr = toLocalDate(d);
       if (closedDates.has(dateStr)) {
         slots[dateStr] = 'closed';
       } else {
@@ -153,7 +162,7 @@ const API = (() => {
     return slots;
   };;
 
-  const createReservation = async ({ customerId, petId, date, time, notes }) => {
+  const createReservation = async ({ customerId, petId, date, time, notes, message }) => {
     if (_isMock()) {
       await _delay(600);
       const id = 'K' + Date.now();
@@ -162,7 +171,7 @@ const API = (() => {
       _mock.reservedSlots[key] = (_mock.reservedSlots[key] || 0) + 1;
       return { success: true, karteId: id };
     }
-    return _fetch({ action: 'createReservation', customerId, petId, date, time, notes });
+    return _fetch({ action: 'createReservation', customerId, petId, date, time, notes, message });
   };
 
   const cancelReservation = async (karteId) => {

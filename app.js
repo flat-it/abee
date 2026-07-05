@@ -7,6 +7,7 @@ const App = (() => {
   // ── 状態管理 ──────────────────────────────────────────────
   const state = {
     lineUserId: null,
+    lineDisplayName: null,
     customerId: null,
     pets: [],
     selectedPetId: null,
@@ -82,6 +83,7 @@ const App = (() => {
         }
         const profile = await liff.getProfile();
         state.lineUserId = profile.userId;
+        state.lineDisplayName = profile.displayName;
       }
       await checkRegistration();
     } catch (err) {
@@ -138,7 +140,7 @@ const App = (() => {
     }
     showLoading(true);
     try {
-      const result = await API.registerLineUser(state.lineUserId, tel);
+      const result = await API.registerLineUser(state.lineUserId, tel, state.lineDisplayName);
       if (result.success) {
         state.customerId = result.customerId;
         document.getElementById('register-done-title').textContent = '初回登録が完了しました。';
