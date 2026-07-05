@@ -358,7 +358,8 @@ const App = (() => {
   };
 
   const handleBooking = async () => {
-    const message = document.getElementById('input-message').value.trim();
+    const messageEl = document.getElementById('input-message') || document.getElementById('input-notes');
+    const message = messageEl ? messageEl.value.trim() : '';
 
     showLoading(true);
     try {
