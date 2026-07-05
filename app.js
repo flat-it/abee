@@ -39,7 +39,12 @@ const App = (() => {
       d.setHours(0, 0, 0, 0);
       return d;
     },
-    toDateStr: (date) => date.toISOString().slice(0, 10),
+    toDateStr: (date) => {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    },
   };
 
   // ── 画面切り替え ──────────────────────────────────────────
@@ -305,7 +310,8 @@ const App = (() => {
             <td colspan="${CONFIG.TIME_SLOTS.length}" class="cal-closed">定休日</td>
           </tr>`;
       }
-      const today = new Date().toISOString().slice(0, 10);
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
       const cells = CONFIG.TIME_SLOTS.map(t => {
         if (date < today) return `<td class="cal-full">—</td>`;
         const available = daySlots[t];
@@ -350,7 +356,7 @@ const App = (() => {
   };
 
   const handleBooking = async () => {
-    const notes = document.getElementById('input-notes').value.trim();
+    const message = document.getElementById('input-message').value.trim();
 
     showLoading(true);
     try {
@@ -359,7 +365,8 @@ const App = (() => {
         petId: state.selectedPetId,
         date: state.selectedDate,
         time: state.selectedTime,
-        notes,
+        notes: message,
+        message,
       });
       if (result.success) {
         // 予約完了後はキャッシュをクリア（最新の空き状況を反映するため）
