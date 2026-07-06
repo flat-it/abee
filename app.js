@@ -316,6 +316,15 @@ const App = (() => {
       const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
       const cells = CONFIG.TIME_SLOTS.map(t => {
         if (date < today) return `<td class="cal-full">—</td>`;
+
+        // 当日の場合、予約時間の1時間前を過ぎていたらブロック
+        if (date === today) {
+          const [h, m] = t.split(':').map(Number);
+          const slotTime = new Date();
+          slotTime.setHours(h - 1, m, 0, 0); // 1時間前
+          if (now >= slotTime) return `<td class="cal-full">—</td>`;
+        }
+
         const available = daySlots[t];
         if (available === undefined) return `<td class="cal-unavailable">—</td>`;
         return available
