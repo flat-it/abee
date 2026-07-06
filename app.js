@@ -269,6 +269,12 @@ const App = (() => {
     state.currentWeekStart = monday;
     const weekKey = fmt.toDateStr(monday);
 
+    // 今週のキャッシュは当日の時間制限があるため毎回取得
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const isCurrentWeek = todayStr >= weekKey && todayStr <= fmt.toDateStr(new Date(monday.getTime() + 6 * 86400000));
+    if (isCurrentWeek) delete state.calendarCache[weekKey];
+
     // キャッシュがあればAPIを呼ばずに表示
     if (state.calendarCache[weekKey]) {
       state.availableSlots = state.calendarCache[weekKey];
