@@ -202,11 +202,11 @@ const App = (() => {
     document.getElementById('detail-datetime').textContent = `${fmt.date(date)} ${time}`;
     document.getElementById('detail-pet').textContent = petName ? `${petName}（${breed}）` : '—';
 
-    // キャンセル期限チェック（前日17時まで）
+    // キャンセル期限チェック（3日前23:59まで）
     const reservationDate = new Date(date);
     const deadline = new Date(reservationDate);
-    deadline.setDate(deadline.getDate() - 1);
-    deadline.setHours(17, 0, 0, 0);
+    deadline.setDate(deadline.getDate() - 3);
+    deadline.setHours(23, 59, 59, 999);
     const now = new Date();
 
     const cancelSection = document.getElementById('cancel-section');
