@@ -111,10 +111,11 @@ const App = (() => {
     }
   };
 
-  // ── 利用規約チェックボックス ──────────────────────────────
+  // ── 利用規約・個人情報チェックボックス ──────────────────────
   const onTermsChange = () => {
-    const agreed = document.getElementById('terms-agree').checked;
-    document.getElementById('btn-terms-next').disabled = !agreed;
+    const termsAgreed = document.getElementById('terms-agree').checked;
+    const privacyAgreed = document.getElementById('privacy-agree').checked;
+    document.getElementById('btn-terms-next').disabled = !(termsAgreed && privacyAgreed);
   };
 
   // ── パスワード確認 ────────────────────────────────────────
