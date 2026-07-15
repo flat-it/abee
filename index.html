@@ -195,7 +195,50 @@
       </p>
     </div>
 
-    <button class="btn btn--primary" onclick="App.handleRegister()">進む</button>
+    <button class="btn btn--primary" onclick="App.handleSendPin()">進む</button>
+
+    <div class="shop-info">
+      <strong>ABEE 三鷹店（TEL：<a href="tel:0422-30-5392">0422-30-5392</a>）</strong>
+      〒181-0014 東京都三鷹市野崎2-8-1 クラウンビル104
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     画面④.5  SMS認証コード入力
+══════════════════════════════════════════════ -->
+<div id="screen-pin-verify" class="screen">
+  <header class="header">
+    <button class="header__home-btn" onclick="App.loadHome()" aria-label="ホームへ戻る">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
+    <span class="header__title">ペットサロンABEE</span>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      <p id="pin-sent-to" style="font-size:14px; margin-bottom:16px; line-height:1.7;">
+        認証コードを送信しました。
+      </p>
+      <div class="form-group">
+        <label class="form-label" for="input-pin">SMSで届いた4桁の認証コードを入力してください。</label>
+        <input
+          id="input-pin"
+          class="form-input"
+          type="tel"
+          inputmode="numeric"
+          placeholder="1234"
+          maxlength="4"
+          autocomplete="one-time-code"
+        >
+      </div>
+    </div>
+
+    <button class="btn btn--primary" onclick="App.handleVerifyPin()">認証する</button>
+    <button class="btn btn--ghost" onclick="App.handleResendPin()">コードを再送する</button>
 
     <div class="shop-info">
       <strong>ABEE 三鷹店（TEL：<a href="tel:0422-30-5392">0422-30-5392</a>）</strong>
