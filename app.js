@@ -233,14 +233,19 @@ const App = (() => {
 
   // ── キャンセル確認 ────────────────────────────────────────
   const confirmCancel = () => {
+    const reason = document.getElementById('input-cancel-reason').value.trim();
+    if (!reason) {
+      showToast('キャンセル理由を入力してください。', 'error');
+      return;
+    }
     if (!confirm(`${fmt.date(state.selectedDate)} ${state.selectedTime} の予約をキャンセルしますか？`)) return;
-    handleCancel();
+    handleCancel(reason);
   };
 
-  const handleCancel = async () => {
+  const handleCancel = async (reason) => {
     showLoading(true);
     try {
-      const result = await API.cancelReservation(state.selectedKarteId);
+      const result = await API.cancelReservation(state.selectedKarteId, reason);
       if (result.success) {
         state.calendarCache = {}; // キャッシュクリア
         showScreen('screen-cancel-done');

@@ -440,7 +440,18 @@
     </div>
 
     <div id="cancel-section">
-      <button class="btn btn--secondary" onclick="App.confirmCancel()" id="btn-cancel">
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="input-cancel-reason">キャンセル理由</label>
+        <textarea
+          id="input-cancel-reason"
+          class="form-input"
+          rows="3"
+          placeholder="キャンセルの理由を入力してください"
+          style="resize:vertical;"
+          oninput="document.getElementById('btn-cancel').disabled = this.value.trim() === ''"
+        ></textarea>
+      </div>
+      <button class="btn btn--secondary" onclick="App.confirmCancel()" id="btn-cancel" disabled>
         予約をキャンセルする
       </button>
       <p style="font-size:12px; color:#999; text-align:center; margin-top:8px;">
