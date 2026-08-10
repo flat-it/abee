@@ -159,7 +159,6 @@ const API = (() => {
         }
       }
     }
-    slots.maxBookableDate = result.maxBookableDate || null;
     return slots;
   };;
 
@@ -175,14 +174,17 @@ const API = (() => {
     return _fetch({ action: 'createReservation', customerId, petId, date, time, notes, message });
   };
 
-  const cancelReservation = async (karteId) => {
+  const cancelReservation = async (karteId, reason) => {
     if (_isMock()) {
       await _delay(500);
       const k = _mock.kartes.find(k => k.id === karteId);
-      if (k) k.cancelled = true;
+      if (k) {
+        k.cancelled = true;
+        k.cancelReason = reason;
+      }
       return { success: true };
     }
-    return _fetch({ action: 'cancelReservation', karteId });
+    return _fetch({ action: 'cancelReservation', karteId, cancelReason: reason });
   };
 
   return { findLineUser, registerLineUser, getPets, getReservations, getAvailableSlots, createReservation, cancelReservation };
