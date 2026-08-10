@@ -159,9 +159,12 @@ const API = (() => {
         }
       }
     }
+
+    // 予約可能上限日をスロットに付加して返す
     slots.maxBookableDate = result.maxBookableDate || null;
+
     return slots;
-  };;
+  };
 
   const createReservation = async ({ customerId, petId, date, time, notes, message }) => {
     if (_isMock()) {
@@ -179,10 +182,7 @@ const API = (() => {
     if (_isMock()) {
       await _delay(500);
       const k = _mock.kartes.find(k => k.id === karteId);
-      if (k) {
-        k.cancelled = true;
-        k.cancelReason = reason;
-      }
+      if (k) { k.cancelled = true; k.cancelReason = reason; }
       return { success: true };
     }
     return _fetch({ action: 'cancelReservation', karteId, cancelReason: reason });

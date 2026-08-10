@@ -303,7 +303,7 @@ const App = (() => {
       const slots = await API.getAvailableSlots(weekKey);
       if (slots.maxBookableDate) {
         state.maxBookableDate = slots.maxBookableDate.slice(0, 10);
-        delete slots.maxBookableDate; // カレンダー描画に混入しないよう削除
+        delete slots.maxBookableDate;
       }
       state.calendarCache[weekKey] = slots; // キャッシュに保存
       state.availableSlots = slots;
