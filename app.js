@@ -15,6 +15,7 @@ const App = (() => {
     selectedDate: null,
     selectedTime: null,
     currentWeekStart: null,
+    maxBookableDate: null,  // 予約可能日（月末まで表示）
     availableSlots: {},
     calendarCache: {}, // 週ごとのキャッシュ
     pendingTel: null,   // SMS認証中の電話番号
@@ -134,17 +135,78 @@ const App = (() => {
     showScreen('screen-register-form');
   };
 
-  // ── 電話番号入力 → そのまま登録 ─────────────────────────
+  // ── SMS認証：コード送信 ──────────────────────────────────
   const handleSendPin = async () => {
     const tel = document.getElementById('input-tel').value.trim().replace(/[-\s]/g, '');
     if (!/^0\d{9,10}$/.test(tel)) {
       showToast('正しい携帯電話番号を入力してください（例：09012345678）', 'error');
       return;
     }
-    await completeRegistration(tel);
+
+    showLoading(true);
+    try {
+      const res = await fetch(CONFIG.SMS_SEND_PIN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber: tel }),
+      });
+      if (!res.ok) throw new Error('send-pin failed');
+      const data = await res.json();
+
+      state.pendingTel = tel;
+      state.pendingPinId = data.pinId;
+
+      document.getElementById('pin-sent-to').textContent =
+        `${tel} に認証コードを送信しました。`;
+      document.getElementById('input-pin').value = '';
+      showScreen('screen-pin-verify');
+    } catch (err) {
+      showToast('認証コードの送信に失敗しました。しばらくしてから再度お試しください。', 'error');
+    } finally {
+      showLoading(false);
+    }
   };
 
-  // ── 初回登録 ──────────────────────────────────────────────
+  // ── SMS認証：再送 ────────────────────────────────────────
+  const handleResendPin = () => {
+    handleSendPin();
+  };
+
+  // ── SMS認証：照合 ────────────────────────────────────────
+  const handleVerifyPin = async () => {
+    const pin = document.getElementById('input-pin').value.trim();
+    if (!/^\d{4}$/.test(pin)) {
+      showToast('4桁の数字を入力してください。', 'error');
+      return;
+    }
+    if (!state.pendingPinId) {
+      showToast('認証コードが送信されていません。もう一度送信してください。', 'error');
+      showScreen('screen-register-form');
+      return;
+    }
+
+    showLoading(true);
+    try {
+      const res = await fetch(CONFIG.SMS_VERIFY_PIN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pinId: state.pendingPinId, pin }),
+      });
+      const data = await res.json();
+
+      if (data.verified === true) {
+        await completeRegistration(state.pendingTel);
+      } else {
+        showToast('認証コードが正しくありません。', 'error');
+      }
+    } catch (err) {
+      showToast('通信エラーが発生しました。', 'error');
+    } finally {
+      showLoading(false);
+    }
+  };
+
+  // ── 初回登録（SMS認証成功後に実行） ──────────────────────
   const completeRegistration = async (tel) => {
     showLoading(true);
     try {
@@ -233,19 +295,14 @@ const App = (() => {
 
   // ── キャンセル確認 ────────────────────────────────────────
   const confirmCancel = () => {
-    const reason = document.getElementById('input-cancel-reason').value.trim();
-    if (!reason) {
-      showToast('キャンセル理由を入力してください。', 'error');
-      return;
-    }
     if (!confirm(`${fmt.date(state.selectedDate)} ${state.selectedTime} の予約をキャンセルしますか？`)) return;
-    handleCancel(reason);
+    handleCancel();
   };
 
-  const handleCancel = async (reason) => {
+  const handleCancel = async () => {
     showLoading(true);
     try {
-      const result = await API.cancelReservation(state.selectedKarteId, reason);
+      const result = await API.cancelReservation(state.selectedKarteId);
       if (result.success) {
         state.calendarCache = {}; // キャッシュクリア
         showScreen('screen-cancel-done');
@@ -300,6 +357,9 @@ const App = (() => {
     showLoading(true);
     try {
       const slots = await API.getAvailableSlots(weekKey);
+      if (slots.maxBookableDate) {
+        state.maxBookableDate = slots.maxBookableDate.slice(0, 10);
+      }
       state.calendarCache[weekKey] = slots; // キャッシュに保存
       state.availableSlots = slots;
       renderCalendar();
@@ -372,6 +432,12 @@ const App = (() => {
   const nextWeek = () => {
     const next = new Date(state.currentWeekStart);
     next.setDate(next.getDate() + 7);
+    // 予約可能日の月末を超えたら進めない
+    if (state.maxBookableDate) {
+      const maxDate = new Date(state.maxBookableDate);
+      const maxMonthEnd = new Date(maxDate.getFullYear(), maxDate.getMonth() + 1, 0);
+      if (next > maxMonthEnd) return;
+    }
     loadCalendar(next);
   };
 
@@ -420,6 +486,8 @@ const App = (() => {
   return {
     init: initLiff,
     handleSendPin,
+    handleResendPin,
+    handleVerifyPin,
     handlePassword,
     onTermsChange,
     handlePetSelect,
