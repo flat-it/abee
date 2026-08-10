@@ -320,15 +320,29 @@ const App = (() => {
     const slots = state.availableSlots;
     const dates = Object.keys(slots).sort();
 
-    // 週表示ラベル
+    // 予約可能月の月末を計算
+    let maxMonthEnd = null;
+    if (state.maxBookableDate) {
+      const maxDate = new Date(state.maxBookableDate);
+      maxMonthEnd = new Date(maxDate.getFullYear(), maxDate.getMonth() + 1, 0);
+      maxMonthEnd.setHours(23, 59, 59, 999);
+    }
+
+    // 週表示ラベル（maxBookableDateの月内に収まる最終日を使用）
+    const visibleDates = maxMonthEnd
+      ? dates.filter(d => new Date(d) <= maxMonthEnd)
+      : dates;
     const first = dates[0];
-    const last = dates[dates.length - 1];
+    const last = visibleDates.length > 0 ? visibleDates[visibleDates.length - 1] : dates[dates.length - 1];
     document.getElementById('cal-week-label').textContent =
       `${fmt.date(first)} 〜 ${fmt.date(last)}`;
 
     // テーブルボディ
     const tbody = document.getElementById('cal-tbody');
     tbody.innerHTML = dates.map(date => {
+      // 予約可能月を超えた日は表示しない
+      if (maxMonthEnd && new Date(date) > maxMonthEnd) return '';
+
       const daySlots = slots[date];
       if (daySlots === 'closed') {
         return `
