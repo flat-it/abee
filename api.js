@@ -159,6 +159,7 @@ const API = (() => {
         }
       }
     }
+    slots.maxBookableDate = result.maxBookableDate || null;
     return slots;
   };;
 
