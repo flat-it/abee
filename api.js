@@ -116,15 +116,31 @@ const API = (() => {
     }
 
     // Logic Appからカレンダーとカルテの生データを受け取る
+    // ※ Logic App の $select に cr984_finishtime を含めること
     const result = await _fetch({ action: 'getAvailableSlots', from: weekStartDate });
 
-    // 予約済みスロットをSetで管理（高速検索）
-    const bookedSlots = new Set();
+    // 予約済み範囲を日付ごとに管理（開始〜終了時刻）
+    const reservationRanges = {};
     for (const k of (result.kartes || [])) {
       const dateStr = k.cra25_day ? k.cra25_day.slice(0, 10) : null;
-      const time = k.cra25_time;
-      if (dateStr && time) bookedSlots.add(`${dateStr}_${time}`);
+      const startTime = k.cra25_time;
+      const endTime = k.cr984_finishtime;
+      if (dateStr && startTime) {
+        if (!reservationRanges[dateStr]) reservationRanges[dateStr] = [];
+        reservationRanges[dateStr].push({ start: startTime, end: endTime });
+      }
     }
+
+    // 指定時刻が予約範囲に含まれるか判定
+    // 開始時刻 <= 対象時刻 < 終了時刻 であれば予約あり
+    // 例: 14:00〜17:00 の予約があれば 16:00 は予約あり、13:00 は空き
+    const isBooked = (dateStr, slotTime) => {
+      const ranges = reservationRanges[dateStr] || [];
+      return ranges.some(r => {
+        if (r.end) return r.start <= slotTime && slotTime < r.end;
+        return r.start === slotTime; // 終了時刻なしは開始一致にフォールバック
+      });
+    };
 
     // 定休日をSetで管理
     const closedDates = new Set();
@@ -155,7 +171,7 @@ const API = (() => {
       } else {
         slots[dateStr] = {};
         for (const t of CONFIG.TIME_SLOTS) {
-          slots[dateStr][t] = !bookedSlots.has(`${dateStr}_${t}`);
+          slots[dateStr][t] = !isBooked(dateStr, t);
         }
       }
     }
