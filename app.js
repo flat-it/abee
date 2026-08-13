@@ -190,7 +190,7 @@ const App = (() => {
       listEl.innerHTML = '<p class="empty-msg">現在のご予約はありません。</p>';
     } else {
       listEl.innerHTML = reservations.map(k => {
-        const pet = pets.find(p => p.id === k.petId);
+        const pet = pets.find(p => p.id?.toLowerCase() === k.petId?.toLowerCase());
         return `
           <div class="reservation-item" onclick="App.openReservationDetail('${k.id}','${k.date}','${k.time}','${pet ? pet.petName : ''}','${pet ? (pet.breed || '') : ''}')">
             <div class="reservation-date">${fmt.date(k.date)} ${k.time}</div>
