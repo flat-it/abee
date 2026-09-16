@@ -41,7 +41,7 @@
         "type": "If",
         "expression": {
           "and": [
-            { "equals": ["@body('Session_Login')?['success']", "1"] }
+            { "equals": ["@body('Session_Login')?['@attributes']?['success']", "1"] }
           ]
         },
         "actions": {
@@ -63,7 +63,7 @@
             "type": "If",
             "expression": {
               "and": [
-                { "equals": ["@body('Auth_Check')?['success']", "1"] }
+                { "equals": ["@body('Auth_Check')?['@attributes']?['success']", "1"] }
               ]
             },
             "actions": {
@@ -97,7 +97,7 @@
                 "type": "If",
                 "expression": {
                   "and": [
-                    { "equals": ["@body('Sms_Send')?['success']", "1"] }
+                    { "equals": ["@body('Sms_Send')?['@attributes']?['success']", "1"] }
                   ]
                 },
                 "actions": {

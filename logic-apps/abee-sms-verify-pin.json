@@ -42,7 +42,7 @@
         "type": "If",
         "expression": {
           "and": [
-            { "equals": ["@body('Session_Login')?['success']", "1"] }
+            { "equals": ["@body('Session_Login')?['@attributes']?['success']", "1"] }
           ]
         },
         "actions": {
@@ -68,8 +68,8 @@
               "statusCode": 200,
               "headers": { "Content-Type": "application/json" },
               "body": {
-                "verified": "@equals(body('Auth_Complete')?['success'], '1')",
-                "errorCode": "@body('Auth_Complete')?['error']"
+                "verified": "@equals(body('Auth_Complete')?['@attributes']?['success'], '1')",
+                "errorCode": "@coalesce(body('Auth_Complete')?['@attributes']?['error'], body('Auth_Complete')?['error'])"
               }
             },
             "runAfter": { "Auth_Complete": ["Succeeded"] }

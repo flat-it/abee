@@ -51,3 +51,20 @@ Aurora SMSのAPIは常にHTTP 200を返し、成否は本文中の `success`（`
 
 `auth.check` のレスポンスは未認証時 `id`、認証済み時 `auth_id` と表記が揺れる可能性があるため、
 `abee-sms-send-pin.json` では `coalesce(auth_id, id)` で両対応している。
+
+## successフィールドが `@attributes` に入れ子になっている点について（実機確認済み）
+
+Aurora SMSのJSONレスポンスは、XMLの属性をJSON化した際の一般的な変換規則に従っており、
+`success` はトップレベルではなく `@attributes` オブジェクトの中に入っている。
+
+```json
+{
+  "@attributes": { "success": "1" },
+  "session_id": "kihauap07gs6neh23pvkat395o"
+}
+```
+
+そのため各所の成否判定は `body('X')?['success']` ではなく `body('X')?['@attributes']?['success']` で行う
+（`session_id` 等の他フィールドはトップレベルのまま）。`session.login`のレスポンスで実機確認済みだが、
+`auth.check` / `sms.send` / `auth.complete` も同じ変換規則が適用されている前提で同様に修正している
+（未検証、実行履歴で要確認）。
