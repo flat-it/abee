@@ -135,14 +135,65 @@ const App = (() => {
     showScreen('screen-register-form');
   };
 
-  // ── 電話番号入力 → そのまま登録 ─────────────────────────
+  // ── 電話番号入力 → SMS PIN送信 ─────────────────────────
   const handleSendPin = async () => {
     const tel = document.getElementById('input-tel').value.trim().replace(/[-\s]/g, '');
     if (!/^0\d{9,10}$/.test(tel)) {
       showToast('正しい携帯電話番号を入力してください（例：09012345678）', 'error');
       return;
     }
-    await completeRegistration(tel);
+    showLoading(true);
+    try {
+      const result = await API.sendPin(tel);
+      state.pendingTel = tel;
+      state.pendingPinId = result.pinId;
+      document.getElementById('pin-sent-to').textContent = tel;
+      document.getElementById('input-pin').value = '';
+      showScreen('screen-pin-verify');
+    } catch (err) {
+      showToast('通信エラーが発生しました。', 'error');
+    } finally {
+      showLoading(false);
+    }
+  };
+
+  // ── PIN照合 ───────────────────────────────────────────────
+  const handleVerifyPin = async () => {
+    const pin = document.getElementById('input-pin').value.trim();
+    if (!/^\d{4}$/.test(pin)) {
+      showToast('4桁の認証コードを入力してください。', 'error');
+      return;
+    }
+    showLoading(true);
+    try {
+      const result = await API.verifyPin(state.pendingPinId, pin);
+      if (!result.verified) {
+        showToast('認証コードが違います。もう一度お試しください。', 'error');
+        document.getElementById('input-pin').value = '';
+        return;
+      }
+    } catch (err) {
+      showToast('通信エラーが発生しました。', 'error');
+      return;
+    } finally {
+      showLoading(false);
+    }
+    await completeRegistration(state.pendingTel);
+  };
+
+  // ── PIN再送 ───────────────────────────────────────────────
+  const handleResendPin = async () => {
+    showLoading(true);
+    try {
+      const result = await API.sendPin(state.pendingTel);
+      state.pendingPinId = result.pinId;
+      document.getElementById('input-pin').value = '';
+      showToast('認証コードを再送しました。', 'success');
+    } catch (err) {
+      showToast('通信エラーが発生しました。', 'error');
+    } finally {
+      showLoading(false);
+    }
   };
 
   // ── 初回登録 ──────────────────────────────────────────────
@@ -442,6 +493,8 @@ const App = (() => {
   return {
     init: initLiff,
     handleSendPin,
+    handleVerifyPin,
+    handleResendPin,
     handlePassword,
     onTermsChange,
     handlePetSelect,

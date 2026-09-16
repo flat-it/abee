@@ -21,9 +21,10 @@ const API = (() => {
   };
 
   const _isMock = () => CONFIG.API_BASE_URL === 'MOCK';
+  const _isSmsMock = () => !CONFIG.SMS_SEND_PIN_URL || CONFIG.SMS_SEND_PIN_URL === 'MOCK';
 
-  const _fetch = async (params) => {
-    const res = await fetch(CONFIG.API_BASE_URL, {
+  const _post = async (url, params) => {
+    const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -39,6 +40,8 @@ const API = (() => {
       throw new Error(`JSON Parse Error: ${text.slice(0, 100)}`);
     }
   };
+
+  const _fetch = (params) => _post(CONFIG.API_BASE_URL, params);
 
   const _delay = (ms = 300) => new Promise(r => setTimeout(r, ms));
 
@@ -65,6 +68,25 @@ const API = (() => {
       }
     }
     return _fetch({ action: 'registerLineUser', lineUserId, tel, displayName });
+  };
+
+  // ── SMS PIN認証 ───────────────────────────────────────────
+
+  const sendPin = async (tel) => {
+    if (_isSmsMock()) {
+      await _delay(400);
+      console.warn('[DEV] SMS_SEND_PIN_URLが未設定。モックPIN(0000)で動作します。');
+      return { pinId: 'MOCK' + Date.now() };
+    }
+    return _post(CONFIG.SMS_SEND_PIN_URL, { tel });
+  };
+
+  const verifyPin = async (pinId, pin) => {
+    if (_isSmsMock()) {
+      await _delay(400);
+      return { verified: pin === '0000' };
+    }
+    return _post(CONFIG.SMS_VERIFY_PIN_URL, { pinId, pin });
   };
 
   // ── ペット ─────────────────────────────────────────────────
@@ -204,5 +226,5 @@ const API = (() => {
     return _fetch({ action: 'cancelReservation', karteId, cancelReason: reason });
   };
 
-  return { findLineUser, registerLineUser, getPets, getReservations, getAvailableSlots, createReservation, cancelReservation };
+  return { findLineUser, registerLineUser, sendPin, verifyPin, getPets, getReservations, getAvailableSlots, createReservation, cancelReservation };
 })();
