@@ -1,180 +1,187 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2016-06-01/Microsoft.Logic.json",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "auroraApiKey": {
-      "type": "securestring",
-      "defaultValue": ""
-    }
-  },
-  "triggers": {
-    "manual": {
-      "type": "Request",
-      "kind": "Http",
-      "inputs": {
-        "schema": {
-          "type": "object",
-          "properties": {
-            "tel": { "type": "string" }
-          },
-          "required": ["tel"]
+  "definition": {
+    "$schema": "https://schema.management.azure.com/schemas/2016-06-01/Microsoft.Logic.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "auroraApiKey": {
+        "type": "securestring",
+        "defaultValue": ""
+      }
+    },
+    "triggers": {
+      "manual": {
+        "type": "Request",
+        "kind": "Http",
+        "inputs": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "tel": { "type": "string" }
+            },
+            "required": ["tel"]
+          }
         }
       }
-    }
-  },
-  "actions": {
-    "Session_Login": {
-      "type": "Http",
-      "inputs": {
-        "method": "GET",
-        "uri": "https://a1.auth-db.com/api.php",
-        "queries": {
-          "method": "session.login",
-          "api_key": "@parameters('auroraApiKey')",
-          "format": "json"
-        }
-      },
-      "runAfter": {}
     },
-    "Check_Session_Login_Success": {
-      "type": "If",
-      "expression": {
-        "and": [
-          { "equals": ["@body('Session_Login')?['success']", "1"] }
-        ]
-      },
-      "actions": {
-        "Auth_Check": {
-          "type": "Http",
-          "inputs": {
-            "method": "GET",
-            "uri": "https://a1.auth-db.com/api.php",
-            "queries": {
-              "method": "auth.check",
-              "session_id": "@body('Session_Login')?['session_id']",
-              "tel": "@triggerBody()?['tel']",
-              "format": "json"
-            }
-          },
-          "runAfter": {}
+    "actions": {
+      "Session_Login": {
+        "type": "Http",
+        "inputs": {
+          "method": "GET",
+          "uri": "https://a1.auth-db.com/api.php",
+          "queries": {
+            "method": "session.login",
+            "api_key": "@parameters('auroraApiKey')",
+            "format": "json"
+          }
         },
-        "Check_Auth_Check_Success": {
-          "type": "If",
-          "expression": {
-            "and": [
-              { "equals": ["@body('Auth_Check')?['success']", "1"] }
-            ]
+        "runAfter": {}
+      },
+      "Check_Session_Login_Success": {
+        "type": "If",
+        "expression": {
+          "and": [
+            { "equals": ["@body('Session_Login')?['success']", "1"] }
+          ]
+        },
+        "actions": {
+          "Auth_Check": {
+            "type": "Http",
+            "inputs": {
+              "method": "GET",
+              "uri": "https://a1.auth-db.com/api.php",
+              "queries": {
+                "method": "auth.check",
+                "session_id": "@body('Session_Login')?['session_id']",
+                "tel": "@triggerBody()?['tel']",
+                "format": "json"
+              }
+            },
+            "runAfter": {}
           },
-          "actions": {
-            "Compose_AuthId": {
-              "type": "Compose",
-              "inputs": "@coalesce(body('Auth_Check')?['auth_id'], body('Auth_Check')?['id'])",
-              "runAfter": {}
+          "Check_Auth_Check_Success": {
+            "type": "If",
+            "expression": {
+              "and": [
+                { "equals": ["@body('Auth_Check')?['success']", "1"] }
+              ]
             },
-            "Compose_Pin": {
-              "type": "Compose",
-              "inputs": "@body('Auth_Check')?['pin']",
-              "runAfter": { "Compose_AuthId": ["Succeeded"] }
-            },
-            "Sms_Send": {
-              "type": "Http",
-              "inputs": {
-                "method": "GET",
-                "uri": "https://a1.auth-db.com/api.php",
-                "queries": {
-                  "method": "sms.send",
-                  "session_id": "@body('Session_Login')?['session_id']",
-                  "auth_id": "@outputs('Compose_AuthId')",
-                  "sms_title": "ABEE",
-                  "sms_text": "@concat('ABEEペットサロンの認証コードは ', outputs('Compose_Pin'), ' です。')",
-                  "format": "json"
-                }
+            "actions": {
+              "Compose_AuthId": {
+                "type": "Compose",
+                "inputs": "@coalesce(body('Auth_Check')?['auth_id'], body('Auth_Check')?['id'])",
+                "runAfter": {}
               },
-              "runAfter": { "Compose_Pin": ["Succeeded"] }
-            },
-            "Check_Sms_Send_Success": {
-              "type": "If",
-              "expression": {
-                "and": [
-                  { "equals": ["@body('Sms_Send')?['success']", "1"] }
-                ]
+              "Compose_Pin": {
+                "type": "Compose",
+                "inputs": "@body('Auth_Check')?['pin']",
+                "runAfter": { "Compose_AuthId": ["Succeeded"] }
               },
-              "actions": {
-                "Response_Success": {
-                  "type": "Response",
-                  "kind": "Http",
-                  "inputs": {
-                    "statusCode": 200,
-                    "headers": { "Content-Type": "application/json" },
-                    "body": {
-                      "pinId": "@outputs('Compose_AuthId')"
-                    }
-                  },
-                  "runAfter": {}
-                }
+              "Sms_Send": {
+                "type": "Http",
+                "inputs": {
+                  "method": "GET",
+                  "uri": "https://a1.auth-db.com/api.php",
+                  "queries": {
+                    "method": "sms.send",
+                    "session_id": "@body('Session_Login')?['session_id']",
+                    "auth_id": "@outputs('Compose_AuthId')",
+                    "sms_title": "ABEE",
+                    "sms_text": "@concat('ABEEペットサロンの認証コードは ', outputs('Compose_Pin'), ' です。')",
+                    "format": "json"
+                  }
+                },
+                "runAfter": { "Compose_Pin": ["Succeeded"] }
               },
-              "else": {
+              "Check_Sms_Send_Success": {
+                "type": "If",
+                "expression": {
+                  "and": [
+                    { "equals": ["@body('Sms_Send')?['success']", "1"] }
+                  ]
+                },
                 "actions": {
-                  "Response_Sms_Send_Failed": {
+                  "Response_Success": {
                     "type": "Response",
                     "kind": "Http",
                     "inputs": {
-                      "statusCode": 502,
+                      "statusCode": 200,
                       "headers": { "Content-Type": "application/json" },
                       "body": {
-                        "pinId": null,
-                        "error": "sms_send_failed",
-                        "detail": "@body('Sms_Send')"
+                        "pinId": "@outputs('Compose_AuthId')"
                       }
                     },
                     "runAfter": {}
                   }
-                }
-              },
-              "runAfter": { "Sms_Send": ["Succeeded"] }
-            }
-          },
-          "else": {
-            "actions": {
-              "Response_Auth_Check_Failed": {
-                "type": "Response",
-                "kind": "Http",
-                "inputs": {
-                  "statusCode": 502,
-                  "headers": { "Content-Type": "application/json" },
-                  "body": {
-                    "pinId": null,
-                    "error": "auth_check_failed",
-                    "detail": "@body('Auth_Check')"
+                },
+                "else": {
+                  "actions": {
+                    "Response_Sms_Send_Failed": {
+                      "type": "Response",
+                      "kind": "Http",
+                      "inputs": {
+                        "statusCode": 502,
+                        "headers": { "Content-Type": "application/json" },
+                        "body": {
+                          "pinId": null,
+                          "error": "sms_send_failed",
+                          "detail": "@body('Sms_Send')"
+                        }
+                      },
+                      "runAfter": {}
+                    }
                   }
                 },
-                "runAfter": {}
-              }
-            }
-          },
-          "runAfter": { "Auth_Check": ["Succeeded"] }
-        }
-      },
-      "else": {
-        "actions": {
-          "Response_Session_Login_Failed": {
-            "type": "Response",
-            "kind": "Http",
-            "inputs": {
-              "statusCode": 502,
-              "headers": { "Content-Type": "application/json" },
-              "body": {
-                "pinId": null,
-                "error": "session_login_failed",
-                "detail": "@body('Session_Login')"
+                "runAfter": { "Sms_Send": ["Succeeded"] }
               }
             },
-            "runAfter": {}
+            "else": {
+              "actions": {
+                "Response_Auth_Check_Failed": {
+                  "type": "Response",
+                  "kind": "Http",
+                  "inputs": {
+                    "statusCode": 502,
+                    "headers": { "Content-Type": "application/json" },
+                    "body": {
+                      "pinId": null,
+                      "error": "auth_check_failed",
+                      "detail": "@body('Auth_Check')"
+                    }
+                  },
+                  "runAfter": {}
+                }
+              }
+            },
+            "runAfter": { "Auth_Check": ["Succeeded"] }
           }
-        }
-      },
-      "runAfter": { "Session_Login": ["Succeeded"] }
-    }
+        },
+        "else": {
+          "actions": {
+            "Response_Session_Login_Failed": {
+              "type": "Response",
+              "kind": "Http",
+              "inputs": {
+                "statusCode": 502,
+                "headers": { "Content-Type": "application/json" },
+                "body": {
+                  "pinId": null,
+                  "error": "session_login_failed",
+                  "detail": "@body('Session_Login')"
+                }
+              },
+              "runAfter": {}
+            }
+          }
+        },
+        "runAfter": { "Session_Login": ["Succeeded"] }
+      }
+    },
+    "outputs": {}
   },
-  "outputs": {}
+  "parameters": {
+    "auroraApiKey": {
+      "value": ""
+    }
+  }
 }

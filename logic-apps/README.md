@@ -9,13 +9,21 @@
 各Logic Appについて：
 
 1. Azure Portalで対象のLogic App（Consumption）を開く
-2. 左メニューの **開発ツール → コード ビュー（Code view）** を開く
-3. このリポジトリの対応するJSONファイルの中身で、既存の定義を丸ごと置き換えて保存
-4. 左メニューの **ワークフローの設定 → パラメーター** で `auroraApiKey` に実際のAPIキーを設定して保存
-   （**このJSONファイル自体にはAPIキーを書き込まない** — gitにコミットされるため）
-5. トリガーURLを確認（Logic App概要画面の「HTTP POSTのURL」）
+2. 左メニューの **開発ツール → ロジック アプリ コード ビュー（Code view）** を開く
+3. このリポジトリの対応するJSONファイルの中身をコピーし、末尾の `parameters.auroraApiKey.value` に実際のAPIキーを
+   書き込んでから、既存の定義を丸ごと置き換えて保存
+   （**リポジトリ側のJSONファイル自体にはAPIキーを書き込まない** — gitにコミットされるため）
+4. トリガーURLを確認（Logic App概要画面の「HTTP POSTのURL」）
    - 既存のLogic Appを編集した場合は多くの場合URLは変わらない
    - もしURLが変わった場合は `config.js` の `SMS_SEND_PIN_URL` / `SMS_VERIFY_PIN_URL` を新しいURLに更新すること
+
+## コードビューのJSON構造について
+
+Consumption Logic Appのコードビューは `{ "definition": {...}, "parameters": {...} }` という2階層構造を
+要求する。`definition.parameters.auroraApiKey`（`type`/`defaultValue`）はワークフロー定義側のパラメータ
+「宣言」、外側の `parameters.auroraApiKey.value` が実際にワークフロー実行時に使われる「値」。
+`definition`の中身だけを丸ごと最上位に貼り付けると、外側の`parameters`と誤認識されて
+`Could not find member 'defaultValue' on object of type 'FlowTemplateParameter'` のようなエラーになるので注意。
 
 ## sms_title / sms_text について
 

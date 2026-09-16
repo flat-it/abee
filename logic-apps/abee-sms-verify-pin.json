@@ -1,98 +1,105 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2016-06-01/Microsoft.Logic.json",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "auroraApiKey": {
-      "type": "securestring",
-      "defaultValue": ""
-    }
-  },
-  "triggers": {
-    "manual": {
-      "type": "Request",
-      "kind": "Http",
-      "inputs": {
-        "schema": {
-          "type": "object",
-          "properties": {
-            "pinId": { "type": "string" },
-            "pin": { "type": "string" }
-          },
-          "required": ["pinId", "pin"]
+  "definition": {
+    "$schema": "https://schema.management.azure.com/schemas/2016-06-01/Microsoft.Logic.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "auroraApiKey": {
+        "type": "securestring",
+        "defaultValue": ""
+      }
+    },
+    "triggers": {
+      "manual": {
+        "type": "Request",
+        "kind": "Http",
+        "inputs": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "pinId": { "type": "string" },
+              "pin": { "type": "string" }
+            },
+            "required": ["pinId", "pin"]
+          }
         }
       }
-    }
-  },
-  "actions": {
-    "Session_Login": {
-      "type": "Http",
-      "inputs": {
-        "method": "GET",
-        "uri": "https://a1.auth-db.com/api.php",
-        "queries": {
-          "method": "session.login",
-          "api_key": "@parameters('auroraApiKey')",
-          "format": "json"
-        }
-      },
-      "runAfter": {}
     },
-    "Check_Session_Login_Success": {
-      "type": "If",
-      "expression": {
-        "and": [
-          { "equals": ["@body('Session_Login')?['success']", "1"] }
-        ]
-      },
-      "actions": {
-        "Auth_Complete": {
-          "type": "Http",
-          "inputs": {
-            "method": "GET",
-            "uri": "https://a1.auth-db.com/api.php",
-            "queries": {
-              "method": "auth.complete",
-              "session_id": "@body('Session_Login')?['session_id']",
-              "auth_id": "@triggerBody()?['pinId']",
-              "pin": "@triggerBody()?['pin']",
-              "format": "json"
-            }
-          },
-          "runAfter": {}
+    "actions": {
+      "Session_Login": {
+        "type": "Http",
+        "inputs": {
+          "method": "GET",
+          "uri": "https://a1.auth-db.com/api.php",
+          "queries": {
+            "method": "session.login",
+            "api_key": "@parameters('auroraApiKey')",
+            "format": "json"
+          }
         },
-        "Response_Verify_Result": {
-          "type": "Response",
-          "kind": "Http",
-          "inputs": {
-            "statusCode": 200,
-            "headers": { "Content-Type": "application/json" },
-            "body": {
-              "verified": "@equals(body('Auth_Complete')?['success'], '1')",
-              "errorCode": "@body('Auth_Complete')?['error']"
-            }
-          },
-          "runAfter": { "Auth_Complete": ["Succeeded"] }
-        }
+        "runAfter": {}
       },
-      "else": {
+      "Check_Session_Login_Success": {
+        "type": "If",
+        "expression": {
+          "and": [
+            { "equals": ["@body('Session_Login')?['success']", "1"] }
+          ]
+        },
         "actions": {
-          "Response_Session_Login_Failed": {
-            "type": "Response",
-            "kind": "Http",
+          "Auth_Complete": {
+            "type": "Http",
             "inputs": {
-              "statusCode": 502,
-              "headers": { "Content-Type": "application/json" },
-              "body": {
-                "verified": false,
-                "errorCode": "session_login_failed"
+              "method": "GET",
+              "uri": "https://a1.auth-db.com/api.php",
+              "queries": {
+                "method": "auth.complete",
+                "session_id": "@body('Session_Login')?['session_id']",
+                "auth_id": "@triggerBody()?['pinId']",
+                "pin": "@triggerBody()?['pin']",
+                "format": "json"
               }
             },
             "runAfter": {}
+          },
+          "Response_Verify_Result": {
+            "type": "Response",
+            "kind": "Http",
+            "inputs": {
+              "statusCode": 200,
+              "headers": { "Content-Type": "application/json" },
+              "body": {
+                "verified": "@equals(body('Auth_Complete')?['success'], '1')",
+                "errorCode": "@body('Auth_Complete')?['error']"
+              }
+            },
+            "runAfter": { "Auth_Complete": ["Succeeded"] }
           }
-        }
-      },
-      "runAfter": { "Session_Login": ["Succeeded"] }
-    }
+        },
+        "else": {
+          "actions": {
+            "Response_Session_Login_Failed": {
+              "type": "Response",
+              "kind": "Http",
+              "inputs": {
+                "statusCode": 502,
+                "headers": { "Content-Type": "application/json" },
+                "body": {
+                  "verified": false,
+                  "errorCode": "session_login_failed"
+                }
+              },
+              "runAfter": {}
+            }
+          }
+        },
+        "runAfter": { "Session_Login": ["Succeeded"] }
+      }
+    },
+    "outputs": {}
   },
-  "outputs": {}
+  "parameters": {
+    "auroraApiKey": {
+      "value": ""
+    }
+  }
 }
