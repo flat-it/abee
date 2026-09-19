@@ -300,6 +300,8 @@ const App = (() => {
       const result = await API.cancelReservation(state.selectedKarteId, reason);
       if (result.success) {
         state.calendarCache = {}; // キャッシュクリア
+        document.getElementById('input-cancel-reason').value = '';
+        document.getElementById('btn-cancel').disabled = true;
         showScreen('screen-cancel-done');
       } else {
         showToast('キャンセルに失敗しました。店舗にお電話ください。', 'error');
@@ -476,6 +478,7 @@ const App = (() => {
       if (result.success) {
         // 予約完了後はキャッシュをクリア（最新の空き状況を反映するため）
         state.calendarCache = {};
+        if (messageEl) messageEl.value = '';
         document.getElementById('confirm-detail').textContent =
           `${fmt.date(state.selectedDate)} ${state.selectedTime}`;
         showScreen('screen-booking-done');
