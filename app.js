@@ -219,6 +219,11 @@ const App = (() => {
 
   // ── ホーム画面 ────────────────────────────────────────────
   const loadHome = async () => {
+    document.getElementById('input-cancel-reason').value = '';
+    document.getElementById('btn-cancel').disabled = true;
+    const messageEl = document.getElementById('input-message') || document.getElementById('input-notes');
+    if (messageEl) messageEl.value = '';
+
     showLoading(true);
     try {
       const [reservations, pets] = await Promise.all([
