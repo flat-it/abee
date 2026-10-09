@@ -68,3 +68,18 @@ Aurora SMSのJSONレスポンスは、XMLの属性をJSON化した際の一般�
 （`session_id` 等の他フィールドはトップレベルのまま）。`session.login`のレスポンスで実機確認済みだが、
 `auth.check` / `sms.send` / `auth.complete` も同じ変換規則が適用されている前提で同様に修正している
 （未検証、実行履歴で要確認）。
+
+## auth.checkで既に認証済み（status=2）の電話番号を再送信する場合について（実機確認済み）
+
+API仕様書P9の記載通り、`auth.check`の`pin`要素は **statusが未認証(1)の場合にのみ返却される**。
+一度PIN認証が完了した電話番号は、`auth.delete`でレコードを削除しない限り`status:2`（認証済み）の
+ままになり続け、`auth.check`を再度呼んでも`pin`が返ってこない。
+
+これに気づかず実装していたときは、`sms_text`の中のPIN部分が空になり、「ABEEペットサロンの認証
+コードは　です。」のようにPINが抜けたテキストがエラーにもならずそのまま送信されてしまっていた
+（`sms.send`自体は渡された文字列をそのまま送るだけなので、本文の中身はチェックされない）。
+
+`abee-sms-send-pin.json`では`Auth_Check`の直後に`Check_Already_Verified`（`status == '2'`判定）を
+追加し、既に認証済みだった場合は`auth.delete`でレコードを削除してから`auth.check`を呼び直し
+（`Auth_Check_Retry`）、新しく発行された`pin`でSMSを送信するようにしている。デバッグ中に同じ
+電話番号で何度もテストする場合、この分岐が必ず通ることになる。
