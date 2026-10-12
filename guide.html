@@ -38,189 +38,46 @@
   }
 
   /* ── ヘッダー ── */
-  .masthead{
-    background:var(--red);
-    color:#fff;
-    padding-top:14px;
-    padding-bottom:14px;
-  }
-  .masthead .wrap{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .masthead a.back{
-    color:#fff;
-    text-decoration:none;
-    font-size:13px;
-    opacity:.9;
-    display:flex;
-    align-items:center;
-    gap:4px;
-  }
-  .masthead .shop{
-    font-weight:700;
-    font-size:14px;
-    letter-spacing:.04em;
-  }
-  .masthead .tagline{
-    font-size:12px;
-    opacity:.85;
-    margin-left:auto;
-  }
+  .masthead{background:var(--red);color:#fff;padding-top:14px;padding-bottom:14px;}
+  .masthead .wrap{display:flex;align-items:center;gap:10px;}
+  .masthead a.back{color:#fff;text-decoration:none;font-size:13px;opacity:.9;display:flex;align-items:center;gap:4px;}
+  .masthead .shop{font-weight:700;font-size:14px;letter-spacing:.04em;}
+  .masthead .tagline{font-size:12px;opacity:.85;margin-left:auto;}
 
   /* ── ヒーロー ── */
-  .hero{
-    padding-top:40px;
-    padding-bottom:28px;
-  }
-  .hero .eyebrow{
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:.12em;
-    color:var(--red);
-    margin-bottom:10px;
-  }
-  .hero h1{
-    font-size:clamp(24px,6vw,32px);
-    font-weight:700;
-    line-height:1.45;
-  }
-  .hero p{
-    margin-top:14px;
-    color:var(--ink-soft);
-    font-size:14.5px;
-    max-width:48ch;
-  }
+  .hero{padding-top:40px;padding-bottom:28px;}
+  .hero .eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--red);margin-bottom:10px;}
+  .hero h1{font-size:clamp(24px,6vw,32px);font-weight:700;line-height:1.45;}
+  .hero p{margin-top:14px;color:var(--ink-soft);font-size:14.5px;max-width:48ch;}
 
   /* ── 注意カード ── */
-  .notice{
-    background:var(--red-soft);
-    border-radius:14px;
-    padding:18px 20px;
-    margin-top:8px;
-    margin-bottom:36px;
-  }
-  .notice .label{
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:.06em;
-    color:var(--red);
-    margin-bottom:8px;
-  }
-  .notice p{
-    font-size:13.5px;
-    color:var(--ink);
-    margin:0 0 10px;
-  }
-  .notice ul{
-    margin:0;
-    padding-left:1.3em;
-    font-size:13.5px;
-  }
+  .notice{background:var(--red-soft);border-radius:14px;padding:18px 20px;margin-top:8px;margin-bottom:36px;}
+  .notice .label{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--red);margin-bottom:8px;}
+  .notice p{font-size:13.5px;color:var(--ink);margin:0 0 10px;}
+  .notice ul{margin:0;padding-left:1.3em;font-size:13.5px;}
   .notice li{margin-bottom:4px;}
   .notice li:last-child{margin-bottom:0;}
 
   /* ── セクション見出し ── */
-  section{
-    padding-top:8px;
-    padding-bottom:44px;
-  }
-  .section-head{
-    display:flex;
-    align-items:baseline;
-    gap:10px;
-    margin-bottom:22px;
-  }
+  section{padding-top:8px;padding-bottom:44px;}
+  .section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:22px;}
   .section-head .no{
-    font-family:'Noto Serif JP',serif;
-    font-size:13px;
-    font-weight:700;
-    color:var(--red);
-    border:1px solid var(--line);
-    border-radius:999px;
-    padding:3px 10px;
-    flex-shrink:0;
+    font-family:'Noto Serif JP',serif;font-size:13px;font-weight:700;color:var(--red);
+    border:1px solid var(--line);border-radius:999px;padding:3px 10px;flex-shrink:0;
   }
-  .section-head h2{
-    font-size:19px;
-    font-weight:700;
-  }
-
-  /* ── ステップ ── */
-  .steps{
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    gap:22px;
-  }
-  .steps::before{
-    content:"";
-    position:absolute;
-    left:17px;
-    top:6px;
-    bottom:6px;
-    width:2px;
-    background:var(--line);
-  }
-  .step{
-    position:relative;
-    display:flex;
-    align-items:flex-start;
-    gap:14px;
-  }
-  .step .num{
-    position:relative;
-    z-index:1;
-    flex-shrink:0;
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    background:var(--red);
-    color:#fff;
-    font-family:'Noto Serif JP',serif;
-    font-weight:700;
-    font-size:15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .step .body{padding-top:5px;flex:1 1 auto;min-width:0;}
-  .step .body h3{font-size:15px;font-weight:700;margin-bottom:5px;}
-  .step .body p{font-size:13.5px;color:var(--ink-soft);margin:0;}
-  .step .body .hint{
-    display:inline-block;
-    margin-top:8px;
-    font-size:12px;
-    color:var(--red);
-    background:var(--red-soft);
-    border-radius:8px;
-    padding:4px 10px;
-  }
+  .section-head h2{font-size:19px;font-weight:700;}
 
   /* ── 時間帯バッジ ── */
   .slots{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
   .slots span{
-    font-size:12.5px;
-    font-variant-numeric:tabular-nums;
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:4px 10px;
+    font-size:12.5px;font-variant-numeric:tabular-nums;
+    background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 10px;
   }
 
   /* ── 情報カード群 ── */
   .info-grid{display:grid;gap:14px;}
-  .info-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:18px 20px;
-  }
-  .info-card h3{
-    font-size:14.5px;font-weight:700;margin-bottom:6px;
-    display:flex;align-items:center;gap:8px;
-  }
+  .info-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .info-card h3{font-size:14.5px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
   .info-card h3 .dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;}
   .info-card p{font-size:13.5px;color:var(--ink-soft);margin:0;}
 
@@ -232,8 +89,7 @@
   .tel-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;}
   .tel-row .num{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em;}
   .copy-btn{
-    margin-left:auto;flex-shrink:0;
-    border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;
+    margin-left:auto;flex-shrink:0;border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;
     font-family:'Noto Sans JP',sans-serif;font-size:12px;border-radius:8px;padding:6px 12px;cursor:pointer;
   }
   .copy-btn:active{background:rgba(255,255,255,.15);}
@@ -241,62 +97,92 @@
 
   @media (max-width:420px){ .hero{padding-top:32px;padding-bottom:22px;} }
 
-  /* ── ステップ内ミニ画面イラスト ── */
-  .thumb{
-    width:92px;
-    flex:0 0 auto;
-    border-radius:10px;
-    overflow:hidden;
-    border:1px solid var(--line);
-    box-shadow:0 6px 16px -10px rgba(0,0,0,.4);
+  /* ══════════════ ウォークスルー（画面が切り替わるステップ） ══════════════ */
+  .wt-stage{display:flex;justify-content:center;min-height:272px;align-items:flex-start;padding-top:4px;}
+  .wt-screen{display:none;width:236px;}
+  .wt-screen.active{display:block;animation:wtIn .4s cubic-bezier(.2,.8,.2,1) both;}
+  @keyframes wtIn{
+    from{opacity:0;transform:translateY(10px) scale(.97);}
+    to{opacity:1;transform:translateY(0) scale(1);}
   }
-  .thumb-bar{height:9px;background:var(--red);}
-  .thumb-body{background:#FAF8F7;padding:7px;}
-  .thumb-card{background:#fff;border-radius:6px;padding:6px;margin-bottom:6px;}
-  .thumb-line{height:4px;border-radius:2px;background:var(--line);margin-bottom:4px;}
-  .thumb-line:last-child{margin-bottom:0;}
-  .thumb-input{
-    border:1px solid var(--line);border-radius:5px;
-    font-size:7px;color:var(--ink-soft);padding:4px 5px;margin-top:4px;
+  @media (prefers-reduced-motion: reduce){ .wt-screen.active{animation:none;} }
+  .w-head{background:var(--red);color:#fff;font-size:12px;font-weight:700;padding:11px 14px;border-radius:16px 16px 0 0;}
+  .w-body{
+    background:#FAF8F7;padding:16px;border:1px solid var(--line);border-top:none;
+    border-radius:0 0 16px 16px;box-shadow:0 16px 34px -18px rgba(0,0,0,.35);
   }
-  .thumb-select{
-    border:1px solid var(--line);border-radius:5px;
-    font-size:7px;color:var(--ink);padding:4px 5px;
-    display:flex;justify-content:space-between;
+  .w-card{background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  .w-p{font-size:11px;color:var(--ink);margin:0 0 10px;line-height:1.7;}
+  .w-label{font-size:10px;color:var(--ink-soft);margin:0 0 7px;}
+  .w-line{height:5px;border-radius:2px;background:var(--line);margin-bottom:6px;}
+  .w-line:last-child{margin-bottom:0;}
+  .w-input{border:1.3px solid var(--line);border-radius:7px;font-size:11px;color:var(--ink);padding:8px 10px;background:#fff;}
+  .w-select{
+    border:1.3px solid var(--line);border-radius:7px;font-size:10.5px;color:var(--ink);
+    padding:8px 10px;display:flex;justify-content:space-between;background:#fff;
   }
-  .thumb-check{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:6.5px;color:var(--ink-soft);}
-  .thumb-check i{width:9px;height:9px;border-radius:2px;background:var(--red);flex-shrink:0;position:relative;}
-  .thumb-check i::after{
-    content:"";position:absolute;left:2px;top:3px;width:4px;height:2px;
-    border-left:1.2px solid #fff;border-bottom:1.2px solid #fff;transform:rotate(-45deg);
+  .w-note{font-size:9.5px;color:var(--ink-soft);margin:6px 0 0;}
+  .w-check{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--ink);margin-top:10px;}
+  .w-check .ck{width:14px;height:14px;border-radius:4px;background:var(--red);flex-shrink:0;position:relative;}
+  .w-check .ck::after{
+    content:"";position:absolute;left:4px;top:5px;width:6px;height:3px;
+    border-left:1.6px solid #fff;border-bottom:1.6px solid #fff;transform:rotate(-45deg);
   }
-  .thumb-row{
+  .w-btn{background:var(--red);color:#fff;text-align:center;font-size:11px;font-weight:700;border-radius:9px;padding:10px;margin-top:10px;}
+  .w-row{
     display:flex;justify-content:space-between;align-items:center;
-    font-size:6.5px;color:var(--ink-soft);padding:3px 0;border-bottom:1px solid var(--line);
+    font-size:10px;color:var(--ink-soft);padding:7px 0;border-bottom:1px solid var(--line);
     font-variant-numeric:tabular-nums;
   }
-  .thumb-row:last-child{border-bottom:none;}
-  .thumb-pin{display:flex;gap:3px;margin-top:4px;}
-  .thumb-pin span{
-    width:13px;height:15px;border:1px solid var(--line);border-radius:3px;
-    font-size:7.5px;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);
+  .w-row:last-child{border-bottom:none;}
+  .w-row b{color:var(--ink);font-weight:700;}
+  .w-pin{display:flex;gap:6px;margin-top:2px;}
+  .w-pin span{
+    width:30px;height:34px;border:1.5px solid var(--line);border-radius:7px;
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink-soft);
   }
-  .thumb-btn{background:var(--red);color:#fff;text-align:center;font-size:7px;font-weight:700;padding:5px;border-radius:5px;}
-  .thumb-cal{width:100%;border-collapse:collapse;font-size:6.5px;}
-  .thumb-cal td{padding:2px 1px;text-align:center;}
-  .thumb-cal td.ok{background:var(--red);color:#fff;border-radius:3px;font-weight:700;}
-  .thumb-cal td.no{color:var(--line);}
-  .thumb-ta{border:1px solid var(--line);border-radius:5px;height:22px;margin-top:4px;}
-  .thumb-bubble{display:flex;align-items:center;justify-content:center;height:54px;}
-  .thumb-bubble .shape{
-    width:46px;height:34px;border-radius:14px 14px 14px 4px;
-    background:var(--card);border:1.3px solid var(--line);
-    display:flex;align-items:center;justify-content:center;
+  .w-cal-nav{display:flex;justify-content:space-between;align-items:center;font-size:9.5px;margin-bottom:10px;color:var(--ink-soft);}
+  .w-cal-nav .pill{background:var(--red-soft);color:var(--red);border-radius:6px;padding:3px 8px;font-weight:700;}
+  .w-cal-nav b{color:var(--ink);font-size:10.5px;font-weight:700;}
+  .w-cal{width:100%;border-collapse:collapse;font-size:9px;}
+  .w-cal th{background:var(--red);color:#fff;padding:5px 2px;font-weight:700;font-size:9px;}
+  .w-cal td{padding:6px 2px;text-align:center;border-bottom:1px solid var(--line);}
+  .w-cal td:first-child{text-align:left;font-size:8.5px;color:var(--ink-soft);}
+  .w-cal td.ok span{background:var(--red);color:#fff;border-radius:5px;padding:3px 6px;font-size:8px;font-weight:700;}
+  .w-cal td.no{color:var(--line);font-size:11px;}
+  .w-ta{border:1.3px solid var(--line);border-radius:7px;height:36px;background:#fff;}
+  .w-bubble{display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:14px;padding-bottom:6px;}
+  .w-bubble .shape{
+    width:96px;height:62px;border-radius:20px 20px 20px 6px;
+    background:#fff;border:1.4px solid var(--line);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.06);
   }
-  .thumb-bubble .shape span{
-    width:16px;height:16px;border-radius:5px;background:var(--red-soft);
-    border:1.2px solid var(--red);
+  .w-bubble .shape span{width:30px;height:30px;border-radius:8px;background:var(--red-soft);border:1.4px solid var(--red);}
+  .w-chip{margin-top:14px;font-size:10px;color:var(--red);background:var(--red-soft);border-radius:999px;padding:6px 14px;font-weight:700;}
+
+  .wt-cap{text-align:center;padding-top:22px;min-height:88px;}
+  .wt-cap .wt-step-no{font-size:11px;font-weight:700;color:var(--red);letter-spacing:.08em;margin-bottom:6px;}
+  .wt-cap h3{font-size:16px;font-weight:700;margin-bottom:6px;}
+  .wt-cap p{font-size:13.5px;color:var(--ink-soft);margin:0;max-width:40ch;margin-left:auto;margin-right:auto;}
+  .wt-cap .wt-hint{
+    display:inline-block;margin-top:10px;font-size:12px;color:var(--red);
+    background:var(--red-soft);border-radius:8px;padding:4px 10px;
   }
+
+  .wt-controls{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:20px;}
+  .wt-arrow{
+    width:34px;height:34px;border-radius:50%;flex-shrink:0;
+    border:1px solid var(--line);background:var(--card);color:var(--ink);
+    font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+  .wt-arrow:disabled{opacity:.3;cursor:default;}
+  .wt-dots{display:flex;gap:7px;}
+  .wt-dot{
+    width:30px;height:30px;border-radius:50%;cursor:pointer;
+    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    font-family:'Noto Serif JP',serif;font-weight:700;font-size:12.5px;
+  }
+  .wt-dot.active{background:var(--red);border-color:var(--red);color:#fff;}
 </style>
 </head>
 <body>
@@ -332,98 +218,98 @@
       <span class="no">STEP 1–5</span>
       <h2>はじめてご利用の方 — 初回登録</h2>
     </div>
-    <div class="steps">
 
-      <div class="step">
-        <div class="num">1</div>
-        <div class="body">
-          <h3>LINEで予約アプリを開く</h3>
-          <p>ABEE三鷹店のLINE公式アカウントから、予約メニューをタップしてアプリを開きます。</p>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-bubble"><div class="shape"><span></span></div></div>
-          </div>
-        </div>
-      </div>
+    <div class="wt" data-wt="register">
+      <div class="wt-stage">
 
-      <div class="step">
-        <div class="num">2</div>
-        <div class="body">
-          <h3>利用規約に同意する</h3>
-          <p>利用規約と個人情報の取り扱いについての内容をご確認のうえ、2つのチェックボックスに同意してください。</p>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-card">
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line" style="width:70%"></div>
+        <div class="wt-screen active"
+             data-title="LINEで予約アプリを開く"
+             data-desc="ABEE三鷹店のLINE公式アカウントから、予約メニューをタップしてアプリを開きます。">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-bubble">
+              <div class="shape"><span></span></div>
+              <div class="w-chip">予約メニューをタップ</div>
             </div>
-            <div class="thumb-check"><i></i>利用規約</div>
-            <div class="thumb-check"><i></i>個人情報</div>
           </div>
         </div>
-      </div>
 
-      <div class="step">
-        <div class="num">3</div>
-        <div class="body">
-          <h3>初回登録用パスワードを入力</h3>
-          <p>既存のお客様限定でご利用いただくための確認用パスワードです。</p>
-          <span class="hint">パスワードは店頭スタッフにお尋ねください</span>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-card">
-              <div class="thumb-line" style="width:55%"></div>
-              <div class="thumb-input">••••••••</div>
+        <div class="wt-screen"
+             data-title="利用規約に同意する"
+             data-desc="利用規約と個人情報の取り扱いについての内容をご確認のうえ、2つのチェックボックスに同意してください。">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-card">
+              <div class="w-line"></div><div class="w-line"></div><div class="w-line" style="width:65%"></div>
             </div>
-            <div class="thumb-btn">進む</div>
+            <div class="w-check"><i class="ck"></i>利用規約に同意する</div>
+            <div class="w-check"><i class="ck"></i>個人情報の取り扱いに同意する</div>
+            <div class="w-btn">進む</div>
           </div>
         </div>
-      </div>
 
-      <div class="step">
-        <div class="num">4</div>
-        <div class="body">
-          <h3>携帯電話番号を入力</h3>
-          <p>ご登録済みの携帯電話番号を、ハイフンなしで入力します（例：09012345678）。</p>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-card">
-              <div class="thumb-line" style="width:65%"></div>
-              <div class="thumb-input">090••••••••</div>
+        <div class="wt-screen"
+             data-title="初回登録用パスワードを入力"
+             data-desc="既存のお客様限定でご利用いただくための確認用パスワードです。"
+             data-hint="パスワードは店頭スタッフにお尋ねください">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-card">
+              <p class="w-p">初回利用登録パスワードを<br>入力してください</p>
+              <div class="w-input">••••••••</div>
             </div>
-            <div class="thumb-btn">進む</div>
+            <div class="w-btn">進む</div>
           </div>
         </div>
-      </div>
 
-      <div class="step">
-        <div class="num">5</div>
-        <div class="body">
-          <h3>届いたSMSの認証コードを入力</h3>
-          <p>入力した番号宛に4桁の認証コードがSMSで届きます。画面に入力すると初回登録が完了します。</p>
-          <span class="hint">コードが届かない場合は「コードを再送する」をタップ</span>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-card">
-              <div class="thumb-line"></div>
-              <div class="thumb-pin"><span>7</span><span>2</span><span>9</span><span>4</span></div>
+        <div class="wt-screen"
+             data-title="携帯電話番号を入力"
+             data-desc="ご登録済みの携帯電話番号を、ハイフンなしで入力します。">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-card">
+              <p class="w-label">携帯電話番号を入力してください。</p>
+              <div class="w-input">09012345678</div>
             </div>
-            <div class="thumb-btn">認証する</div>
+            <p class="w-note">※ ハイフンなしで入力してください</p>
+            <div class="w-btn">進む</div>
           </div>
         </div>
+
+        <div class="wt-screen"
+             data-title="届いたSMSの認証コードを入力"
+             data-desc="入力した番号宛に4桁の認証コードがSMSで届きます。画面に入力すると初回登録が完了します。"
+             data-hint="コードが届かない場合は「コードを再送する」をタップ">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-card">
+              <p class="w-p">090••••••••◦◦ 宛に認証コードを<br>送信しました。SMSに記載の<br>4桁のコードを入力してください。</p>
+              <div class="w-pin"><span>7</span><span>2</span><span>9</span><span>4</span></div>
+            </div>
+            <div class="w-btn">認証する</div>
+          </div>
+        </div>
+
       </div>
 
+      <div class="wt-cap">
+        <div class="wt-step-no" data-role="stepno"></div>
+        <h3 data-role="title"></h3>
+        <p data-role="desc"></p>
+        <span class="wt-hint" data-role="hint" hidden></span>
+      </div>
+
+      <div class="wt-controls">
+        <button class="wt-arrow" data-dir="-1" aria-label="前のステップ">‹</button>
+        <div class="wt-dots">
+          <button class="wt-dot" data-i="0">1</button>
+          <button class="wt-dot" data-i="1">2</button>
+          <button class="wt-dot" data-i="2">3</button>
+          <button class="wt-dot" data-i="3">4</button>
+          <button class="wt-dot" data-i="4">5</button>
+        </div>
+        <button class="wt-arrow" data-dir="1" aria-label="次のステップ">›</button>
+      </div>
     </div>
   </section>
 
@@ -432,81 +318,89 @@
       <span class="no">STEP 1–4</span>
       <h2>ご予約の流れ</h2>
     </div>
-    <div class="steps">
 
-      <div class="step">
-        <div class="num">1</div>
-        <div class="body">
-          <h3>ホーム画面で「新規予約」をタップ</h3>
-          <p>登録済みの方は、アプリを開くとすぐにホーム画面（現在の予約一覧）が表示されます。</p>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-card">
-              <div class="thumb-row"><span>9/20 10:00</span></div>
-              <div class="thumb-row"><span>9/25 13:00</span></div>
+    <div class="wt" data-wt="booking">
+      <div class="wt-stage">
+
+        <div class="wt-screen active"
+             data-title="ホーム画面で「新規予約」をタップ"
+             data-desc="登録済みの方は、アプリを開くとすぐにホーム画面（現在の予約一覧）が表示されます。">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-card">
+              <p class="w-label">現在のご予約</p>
+              <div class="w-row"><span>9/20（日）10:00</span><b>ポチ</b></div>
+              <div class="w-row"><span>9/25（金）13:00</span><b>モモ</b></div>
             </div>
-            <div class="thumb-btn">新規予約</div>
+            <div class="w-btn">新規予約</div>
           </div>
         </div>
-      </div>
 
-      <div class="step">
-        <div class="num">2</div>
-        <div class="body">
-          <h3>ペットを選択</h3>
-          <p>ご登録済みのペットの中から、今回ご来店されるペットを選びます。</p>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-card">
-              <div class="thumb-select"><span>ポチ</span><span>▾</span></div>
+        <div class="wt-screen"
+             data-title="ペットを選択"
+             data-desc="ご登録済みのペットの中から、今回ご来店されるペットを選びます。">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-card">
+              <p class="w-label">予約するペットを選択</p>
+              <div class="w-select"><span>ポチ（トイプードル）</span><span>▾</span></div>
             </div>
-            <div class="thumb-btn">日程を選ぶ</div>
+            <div class="w-btn">日程を選ぶ</div>
           </div>
         </div>
-      </div>
 
-      <div class="step">
-        <div class="num">3</div>
-        <div class="body">
-          <h3>希望の日時を選択</h3>
-          <p>カレンダーから空いている日時を選びます。「前週」「翌週」ボタンで表示する週を切り替えられます。</p>
-          <div class="slots"><span>10:00</span><span>13:00</span><span>16:00</span></div>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-card">
-              <table class="thumb-cal">
-                <tr><td class="ok">10</td><td class="no">×</td><td class="ok">16</td></tr>
-                <tr><td class="no">×</td><td class="ok">13</td><td class="ok">16</td></tr>
+        <div class="wt-screen"
+             data-title="希望の日時を選択"
+             data-desc="カレンダーから空いている日時を選びます。「前週」「翌週」ボタンで表示する週を切り替えられます。">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-card">
+              <div class="w-cal-nav"><span class="pill">前週</span><b>9/14 〜 9/20</b><span class="pill">翌週</span></div>
+              <table class="w-cal">
+                <tr><th></th><th>10:00</th><th>13:00</th><th>16:00</th></tr>
+                <tr><td>9/16（水）</td><td class="ok"><span>予約</span></td><td class="no">×</td><td class="ok"><span>予約</span></td></tr>
+                <tr><td>9/17（木）</td><td class="no">×</td><td class="ok"><span>予約</span></td><td class="ok"><span>予約</span></td></tr>
               </table>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="step">
-        <div class="num">4</div>
-        <div class="body">
-          <h3>連絡事項を入力して確定</h3>
-          <p>気になることがあれば連絡事項欄にご記入のうえ、「予約する」をタップして完了です。</p>
-        </div>
-        <div class="thumb">
-          <div class="thumb-bar"></div>
-          <div class="thumb-body">
-            <div class="thumb-card">
-              <div class="thumb-line" style="width:55%"></div>
-              <div class="thumb-ta"></div>
+        <div class="wt-screen"
+             data-title="連絡事項を入力して確定"
+             data-desc="気になることがあれば連絡事項欄にご記入のうえ、「予約する」をタップして完了です。">
+          <div class="w-head">ペットサロンABEE</div>
+          <div class="w-body">
+            <div class="w-card">
+              <p class="w-label">9月20日 10:00 のご予約</p>
+              <p class="w-p" style="margin:0;">ポチ（トイプードル）</p>
             </div>
-            <div class="thumb-btn">予約する</div>
+            <div class="w-card">
+              <p class="w-label">連絡事項（任意）</p>
+              <div class="w-ta"></div>
+            </div>
+            <div class="w-btn">予約する</div>
           </div>
         </div>
+
       </div>
 
+      <div class="wt-cap">
+        <div class="wt-step-no" data-role="stepno"></div>
+        <h3 data-role="title"></h3>
+        <p data-role="desc"></p>
+        <span class="wt-hint" data-role="hint" hidden></span>
+      </div>
+
+      <div class="wt-controls">
+        <button class="wt-arrow" data-dir="-1" aria-label="前のステップ">‹</button>
+        <div class="wt-dots">
+          <button class="wt-dot" data-i="0">1</button>
+          <button class="wt-dot" data-i="1">2</button>
+          <button class="wt-dot" data-i="2">3</button>
+          <button class="wt-dot" data-i="3">4</button>
+        </div>
+        <button class="wt-arrow" data-dir="1" aria-label="次のステップ">›</button>
+      </div>
     </div>
   </section>
 
@@ -545,6 +439,46 @@
 
 <script>
   (function(){
+    function initWalkthrough(wt){
+      var screens = Array.prototype.slice.call(wt.querySelectorAll('.wt-screen'));
+      var dots = Array.prototype.slice.call(wt.querySelectorAll('.wt-dot'));
+      var titleEl = wt.querySelector('[data-role="title"]');
+      var descEl = wt.querySelector('[data-role="desc"]');
+      var hintEl = wt.querySelector('[data-role="hint"]');
+      var stepNoEl = wt.querySelector('[data-role="stepno"]');
+      var prevBtn = wt.querySelector('[data-dir="-1"]');
+      var nextBtn = wt.querySelector('[data-dir="1"]');
+      var current = 0;
+
+      function show(i){
+        current = Math.max(0, Math.min(screens.length - 1, i));
+        screens.forEach(function(s, idx){ s.classList.toggle('active', idx === current); });
+        dots.forEach(function(d, idx){ d.classList.toggle('active', idx === current); });
+        var s = screens[current];
+        stepNoEl.textContent = 'STEP ' + (current + 1) + ' / ' + screens.length;
+        titleEl.textContent = s.dataset.title || '';
+        descEl.textContent = s.dataset.desc || '';
+        if (s.dataset.hint) {
+          hintEl.textContent = s.dataset.hint;
+          hintEl.hidden = false;
+        } else {
+          hintEl.hidden = true;
+        }
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === screens.length - 1;
+      }
+
+      dots.forEach(function(d, idx){
+        d.addEventListener('click', function(){ show(idx); });
+      });
+      prevBtn.addEventListener('click', function(){ show(current - 1); });
+      nextBtn.addEventListener('click', function(){ show(current + 1); });
+
+      show(0);
+    }
+
+    Array.prototype.slice.call(document.querySelectorAll('.wt')).forEach(initWalkthrough);
+
     var btn = document.getElementById('copy-btn');
     var num = document.getElementById('tel-num').textContent;
     btn.addEventListener('click', function(){
