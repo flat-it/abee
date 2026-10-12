@@ -166,7 +166,8 @@
   .step{
     position:relative;
     display:flex;
-    gap:16px;
+    align-items:flex-start;
+    gap:14px;
   }
   .step .num{
     position:relative;
@@ -184,7 +185,7 @@
     align-items:center;
     justify-content:center;
   }
-  .step .body{padding-top:5px;}
+  .step .body{padding-top:5px;flex:1 1 auto;min-width:0;}
   .step .body h3{font-size:15px;font-weight:700;margin-bottom:5px;}
   .step .body p{font-size:13.5px;color:var(--ink-soft);margin:0;}
   .step .body .hint{
@@ -240,35 +241,62 @@
 
   @media (max-width:420px){ .hero{padding-top:32px;padding-bottom:22px;} }
 
-  /* ── 画面プレビュー ── */
-  .mock{
-    width:100%;max-width:250px;margin:28px auto 4px;
-    border-radius:18px;overflow:hidden;
-    background:var(--card);border:1px solid var(--line);
-    box-shadow:0 16px 34px -18px rgba(0,0,0,.35);
+  /* ── ステップ内ミニ画面イラスト ── */
+  .thumb{
+    width:92px;
+    flex:0 0 auto;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    box-shadow:0 6px 16px -10px rgba(0,0,0,.4);
   }
-  .mock-head{background:var(--red);color:#fff;font-size:11px;font-weight:700;letter-spacing:.02em;padding:11px 14px;}
-  .mock-body{padding:16px;background:#FAF8F7;}
-  .mock-card{background:#fff;border-radius:10px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
-  .mock-p{font-size:10.5px;color:var(--ink);margin:0 0 10px;line-height:1.7;}
-  .mock-pin{display:flex;gap:6px;}
-  .mock-pin span{
-    width:30px;height:34px;border:1.5px solid var(--line);border-radius:7px;
-    display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink-soft);
+  .thumb-bar{height:9px;background:var(--red);}
+  .thumb-body{background:#FAF8F7;padding:7px;}
+  .thumb-card{background:#fff;border-radius:6px;padding:6px;margin-bottom:6px;}
+  .thumb-line{height:4px;border-radius:2px;background:var(--line);margin-bottom:4px;}
+  .thumb-line:last-child{margin-bottom:0;}
+  .thumb-input{
+    border:1px solid var(--line);border-radius:5px;
+    font-size:7px;color:var(--ink-soft);padding:4px 5px;margin-top:4px;
   }
-  .mock-btn{background:var(--red);color:#fff;text-align:center;font-size:10.5px;font-weight:700;border-radius:9px;padding:10px;margin-bottom:8px;}
-  .mock-link{text-align:center;font-size:10px;color:var(--ink-soft);}
-  .mock-cal-nav{display:flex;justify-content:space-between;align-items:center;font-size:9.5px;margin-bottom:10px;color:var(--ink-soft);}
-  .mock-cal-nav .pill{background:var(--red-soft);color:var(--red);border-radius:6px;padding:3px 8px;font-weight:700;}
-  .mock-cal-nav b{color:var(--ink);font-size:10.5px;font-weight:700;}
-  .mock-cal{width:100%;border-collapse:collapse;font-size:9px;}
-  .mock-cal th{background:var(--red);color:#fff;padding:5px 2px;font-weight:700;font-size:9px;}
-  .mock-cal td{padding:6px 2px;text-align:center;border-bottom:1px solid var(--line);}
-  .mock-cal td:first-child{text-align:left;font-size:8.5px;color:var(--ink-soft);}
-  .mock-cal td.ok{color:#fff;}
-  .mock-cal td.ok span{background:var(--red);border-radius:5px;padding:3px 5px;font-size:8px;font-weight:700;}
-  .mock-cal td.no{color:var(--line);font-size:11px;}
-  .mock-caption{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:10px;}
+  .thumb-select{
+    border:1px solid var(--line);border-radius:5px;
+    font-size:7px;color:var(--ink);padding:4px 5px;
+    display:flex;justify-content:space-between;
+  }
+  .thumb-check{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:6.5px;color:var(--ink-soft);}
+  .thumb-check i{width:9px;height:9px;border-radius:2px;background:var(--red);flex-shrink:0;position:relative;}
+  .thumb-check i::after{
+    content:"";position:absolute;left:2px;top:3px;width:4px;height:2px;
+    border-left:1.2px solid #fff;border-bottom:1.2px solid #fff;transform:rotate(-45deg);
+  }
+  .thumb-row{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:6.5px;color:var(--ink-soft);padding:3px 0;border-bottom:1px solid var(--line);
+    font-variant-numeric:tabular-nums;
+  }
+  .thumb-row:last-child{border-bottom:none;}
+  .thumb-pin{display:flex;gap:3px;margin-top:4px;}
+  .thumb-pin span{
+    width:13px;height:15px;border:1px solid var(--line);border-radius:3px;
+    font-size:7.5px;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);
+  }
+  .thumb-btn{background:var(--red);color:#fff;text-align:center;font-size:7px;font-weight:700;padding:5px;border-radius:5px;}
+  .thumb-cal{width:100%;border-collapse:collapse;font-size:6.5px;}
+  .thumb-cal td{padding:2px 1px;text-align:center;}
+  .thumb-cal td.ok{background:var(--red);color:#fff;border-radius:3px;font-weight:700;}
+  .thumb-cal td.no{color:var(--line);}
+  .thumb-ta{border:1px solid var(--line);border-radius:5px;height:22px;margin-top:4px;}
+  .thumb-bubble{display:flex;align-items:center;justify-content:center;height:54px;}
+  .thumb-bubble .shape{
+    width:46px;height:34px;border-radius:14px 14px 14px 4px;
+    background:var(--card);border:1.3px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .thumb-bubble .shape span{
+    width:16px;height:16px;border-radius:5px;background:var(--red-soft);
+    border:1.2px solid var(--red);
+  }
 </style>
 </head>
 <body>
@@ -305,20 +333,41 @@
       <h2>はじめてご利用の方 — 初回登録</h2>
     </div>
     <div class="steps">
+
       <div class="step">
         <div class="num">1</div>
         <div class="body">
           <h3>LINEで予約アプリを開く</h3>
           <p>ABEE三鷹店のLINE公式アカウントから、予約メニューをタップしてアプリを開きます。</p>
         </div>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-bubble"><div class="shape"><span></span></div></div>
+          </div>
+        </div>
       </div>
+
       <div class="step">
         <div class="num">2</div>
         <div class="body">
           <h3>利用規約に同意する</h3>
           <p>利用規約と個人情報の取り扱いについての内容をご確認のうえ、2つのチェックボックスに同意してください。</p>
         </div>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-card">
+              <div class="thumb-line"></div>
+              <div class="thumb-line"></div>
+              <div class="thumb-line" style="width:70%"></div>
+            </div>
+            <div class="thumb-check"><i></i>利用規約</div>
+            <div class="thumb-check"><i></i>個人情報</div>
+          </div>
+        </div>
       </div>
+
       <div class="step">
         <div class="num">3</div>
         <div class="body">
@@ -326,14 +375,36 @@
           <p>既存のお客様限定でご利用いただくための確認用パスワードです。</p>
           <span class="hint">パスワードは店頭スタッフにお尋ねください</span>
         </div>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-card">
+              <div class="thumb-line" style="width:55%"></div>
+              <div class="thumb-input">••••••••</div>
+            </div>
+            <div class="thumb-btn">進む</div>
+          </div>
+        </div>
       </div>
+
       <div class="step">
         <div class="num">4</div>
         <div class="body">
           <h3>携帯電話番号を入力</h3>
           <p>ご登録済みの携帯電話番号を、ハイフンなしで入力します（例：09012345678）。</p>
         </div>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-card">
+              <div class="thumb-line" style="width:65%"></div>
+              <div class="thumb-input">090••••••••</div>
+            </div>
+            <div class="thumb-btn">進む</div>
+          </div>
+        </div>
       </div>
+
       <div class="step">
         <div class="num">5</div>
         <div class="body">
@@ -341,21 +412,19 @@
           <p>入力した番号宛に4桁の認証コードがSMSで届きます。画面に入力すると初回登録が完了します。</p>
           <span class="hint">コードが届かない場合は「コードを再送する」をタップ</span>
         </div>
-      </div>
-    </div>
-
-    <div class="mock">
-      <div class="mock-head">ペットサロンABEE</div>
-      <div class="mock-body">
-        <div class="mock-card">
-          <p class="mock-p">090••••••••◦◦ 宛に認証コードを<br>送信しました。SMSに記載の<br>4桁のコードを入力してください。</p>
-          <div class="mock-pin"><span>7</span><span>2</span><span>9</span><span>4</span></div>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-card">
+              <div class="thumb-line"></div>
+              <div class="thumb-pin"><span>7</span><span>2</span><span>9</span><span>4</span></div>
+            </div>
+            <div class="thumb-btn">認証する</div>
+          </div>
         </div>
-        <div class="mock-btn">認証する</div>
-        <div class="mock-link">コードを再送する</div>
       </div>
+
     </div>
-    <p class="mock-caption">SMS認証コードの入力画面</p>
   </section>
 
   <section>
@@ -364,20 +433,42 @@
       <h2>ご予約の流れ</h2>
     </div>
     <div class="steps">
+
       <div class="step">
         <div class="num">1</div>
         <div class="body">
           <h3>ホーム画面で「新規予約」をタップ</h3>
           <p>登録済みの方は、アプリを開くとすぐにホーム画面（現在の予約一覧）が表示されます。</p>
         </div>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-card">
+              <div class="thumb-row"><span>9/20 10:00</span></div>
+              <div class="thumb-row"><span>9/25 13:00</span></div>
+            </div>
+            <div class="thumb-btn">新規予約</div>
+          </div>
+        </div>
       </div>
+
       <div class="step">
         <div class="num">2</div>
         <div class="body">
           <h3>ペットを選択</h3>
           <p>ご登録済みのペットの中から、今回ご来店されるペットを選びます。</p>
         </div>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-card">
+              <div class="thumb-select"><span>ポチ</span><span>▾</span></div>
+            </div>
+            <div class="thumb-btn">日程を選ぶ</div>
+          </div>
+        </div>
       </div>
+
       <div class="step">
         <div class="num">3</div>
         <div class="body">
@@ -385,30 +476,38 @@
           <p>カレンダーから空いている日時を選びます。「前週」「翌週」ボタンで表示する週を切り替えられます。</p>
           <div class="slots"><span>10:00</span><span>13:00</span><span>16:00</span></div>
         </div>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-card">
+              <table class="thumb-cal">
+                <tr><td class="ok">10</td><td class="no">×</td><td class="ok">16</td></tr>
+                <tr><td class="no">×</td><td class="ok">13</td><td class="ok">16</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="step">
         <div class="num">4</div>
         <div class="body">
           <h3>連絡事項を入力して確定</h3>
           <p>気になることがあれば連絡事項欄にご記入のうえ、「予約する」をタップして完了です。</p>
         </div>
-      </div>
-    </div>
-
-    <div class="mock">
-      <div class="mock-head">ペットサロンABEE</div>
-      <div class="mock-body">
-        <div class="mock-card">
-          <div class="mock-cal-nav"><span class="pill">前週</span><b>9/14 〜 9/20</b><span class="pill">翌週</span></div>
-          <table class="mock-cal">
-            <tr><th></th><th>10:00</th><th>13:00</th><th>16:00</th></tr>
-            <tr><td>9/16（水）</td><td class="ok"><span>予約</span></td><td class="no">×</td><td class="ok"><span>予約</span></td></tr>
-            <tr><td>9/17（木）</td><td class="no">×</td><td class="ok"><span>予約</span></td><td class="ok"><span>予約</span></td></tr>
-          </table>
+        <div class="thumb">
+          <div class="thumb-bar"></div>
+          <div class="thumb-body">
+            <div class="thumb-card">
+              <div class="thumb-line" style="width:55%"></div>
+              <div class="thumb-ta"></div>
+            </div>
+            <div class="thumb-btn">予約する</div>
+          </div>
         </div>
       </div>
+
     </div>
-    <p class="mock-caption">空き状況カレンダーの画面</p>
   </section>
 
   <section>
