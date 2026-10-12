@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LINE予約ガイド | ABEE三鷹店</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --red:#8B1A1A;
+    --red-deep:#5C1010;
+    --red-soft:#F5E8E8;
+    --ink:#2A2220;
+    --ink-soft:#6B5C58;
+    --paper:#FBFAF9;
+    --card:#FFFFFF;
+    --line:#E8DCD9;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;
+    line-height:1.8;
+  }
+  img{max-width:100%;}
+  h1,h2,h3{
+    font-family:'Noto Serif JP',serif;
+    color:var(--red-deep);
+    margin:0;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  /* ── ヘッダー ── */
+  .masthead{
+    background:var(--red);
+    color:#fff;
+    padding-top:14px;
+    padding-bottom:14px;
+  }
+  .masthead .wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .masthead a.back{
+    color:#fff;
+    text-decoration:none;
+    font-size:13px;
+    opacity:.9;
+    display:flex;
+    align-items:center;
+    gap:4px;
+  }
+  .masthead .shop{
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:.04em;
+  }
+  .masthead .tagline{
+    font-size:12px;
+    opacity:.85;
+    margin-left:auto;
+  }
+
+  /* ── ヒーロー ── */
+  .hero{
+    padding-top:40px;
+    padding-bottom:28px;
+  }
+  .hero .eyebrow{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.12em;
+    color:var(--red);
+    margin-bottom:10px;
+  }
+  .hero h1{
+    font-size:clamp(24px,6vw,32px);
+    font-weight:700;
+    line-height:1.45;
+  }
+  .hero p{
+    margin-top:14px;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    max-width:48ch;
+  }
+
+  /* ── 注意カード ── */
+  .notice{
+    background:var(--red-soft);
+    border-radius:14px;
+    padding:18px 20px;
+    margin-top:8px;
+    margin-bottom:36px;
+  }
+  .notice .label{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.06em;
+    color:var(--red);
+    margin-bottom:8px;
+  }
+  .notice p{
+    font-size:13.5px;
+    color:var(--ink);
+    margin:0 0 10px;
+  }
+  .notice ul{
+    margin:0;
+    padding-left:1.3em;
+    font-size:13.5px;
+  }
+  .notice li{margin-bottom:4px;}
+  .notice li:last-child{margin-bottom:0;}
+
+  /* ── セクション見出し ── */
+  section{
+    padding-top:8px;
+    padding-bottom:44px;
+  }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .section-head .no{
+    font-family:'Noto Serif JP',serif;
+    font-size:13px;
+    font-weight:700;
+    color:var(--red);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:3px 10px;
+    flex-shrink:0;
+  }
+  .section-head h2{
+    font-size:19px;
+    font-weight:700;
+  }
+
+  /* ── ステップ ── */
+  .steps{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+  }
+  .steps::before{
+    content:"";
+    position:absolute;
+    left:17px;
+    top:6px;
+    bottom:6px;
+    width:2px;
+    background:var(--line);
+  }
+  .step{
+    position:relative;
+    display:flex;
+    gap:16px;
+  }
+  .step .num{
+    position:relative;
+    z-index:1;
+    flex-shrink:0;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:var(--red);
+    color:#fff;
+    font-family:'Noto Serif JP',serif;
+    font-weight:700;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .step .body{padding-top:5px;}
+  .step .body h3{font-size:15px;font-weight:700;margin-bottom:5px;}
+  .step .body p{font-size:13.5px;color:var(--ink-soft);margin:0;}
+  .step .body .hint{
+    display:inline-block;
+    margin-top:8px;
+    font-size:12px;
+    color:var(--red);
+    background:var(--red-soft);
+    border-radius:8px;
+    padding:4px 10px;
+  }
+
+  /* ── 時間帯バッジ ── */
+  .slots{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .slots span{
+    font-size:12.5px;
+    font-variant-numeric:tabular-nums;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:4px 10px;
+  }
+
+  /* ── 情報カード群 ── */
+  .info-grid{display:grid;gap:14px;}
+  .info-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 20px;
+  }
+  .info-card h3{
+    font-size:14.5px;font-weight:700;margin-bottom:6px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .info-card h3 .dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;}
+  .info-card p{font-size:13.5px;color:var(--ink-soft);margin:0;}
+
+  /* ── フッター ── */
+  footer{padding-top:32px;padding-bottom:48px;}
+  .contact-card{background:var(--red);color:#fff;border-radius:16px;padding:26px 24px;}
+  .contact-card .name{font-family:'Noto Serif JP',serif;font-size:18px;font-weight:700;margin-bottom:4px;}
+  .contact-card .addr{font-size:12.5px;opacity:.9;margin-bottom:18px;}
+  .tel-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;}
+  .tel-row .num{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em;}
+  .copy-btn{
+    margin-left:auto;flex-shrink:0;
+    border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;
+    font-family:'Noto Sans JP',sans-serif;font-size:12px;border-radius:8px;padding:6px 12px;cursor:pointer;
+  }
+  .copy-btn:active{background:rgba(255,255,255,.15);}
+  .foot-note{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:22px;}
+
+  @media (max-width:420px){ .hero{padding-top:32px;padding-bottom:22px;} }
+
+  /* ── 画面プレビュー ── */
+  .mock{
+    width:100%;max-width:250px;margin:28px auto 4px;
+    border-radius:18px;overflow:hidden;
+    background:var(--card);border:1px solid var(--line);
+    box-shadow:0 16px 34px -18px rgba(0,0,0,.35);
+  }
+  .mock-head{background:var(--red);color:#fff;font-size:11px;font-weight:700;letter-spacing:.02em;padding:11px 14px;}
+  .mock-body{padding:16px;background:#FAF8F7;}
+  .mock-card{background:#fff;border-radius:10px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  .mock-p{font-size:10.5px;color:var(--ink);margin:0 0 10px;line-height:1.7;}
+  .mock-pin{display:flex;gap:6px;}
+  .mock-pin span{
+    width:30px;height:34px;border:1.5px solid var(--line);border-radius:7px;
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink-soft);
+  }
+  .mock-btn{background:var(--red);color:#fff;text-align:center;font-size:10.5px;font-weight:700;border-radius:9px;padding:10px;margin-bottom:8px;}
+  .mock-link{text-align:center;font-size:10px;color:var(--ink-soft);}
+  .mock-cal-nav{display:flex;justify-content:space-between;align-items:center;font-size:9.5px;margin-bottom:10px;color:var(--ink-soft);}
+  .mock-cal-nav .pill{background:var(--red-soft);color:var(--red);border-radius:6px;padding:3px 8px;font-weight:700;}
+  .mock-cal-nav b{color:var(--ink);font-size:10.5px;font-weight:700;}
+  .mock-cal{width:100%;border-collapse:collapse;font-size:9px;}
+  .mock-cal th{background:var(--red);color:#fff;padding:5px 2px;font-weight:700;font-size:9px;}
+  .mock-cal td{padding:6px 2px;text-align:center;border-bottom:1px solid var(--line);}
+  .mock-cal td:first-child{text-align:left;font-size:8.5px;color:var(--ink-soft);}
+  .mock-cal td.ok{color:#fff;}
+  .mock-cal td.ok span{background:var(--red);border-radius:5px;padding:3px 5px;font-size:8px;font-weight:700;}
+  .mock-cal td.no{color:var(--line);font-size:11px;}
+  .mock-caption{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:10px;}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="back" href="index.html">←</a>
+    <span class="shop">ABEE 三鷹店</span>
+    <span class="tagline">LINE予約アプリ</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">ご利用ガイド</div>
+    <h1>LINEから、いつでも<br>トリミングのご予約を。</h1>
+    <p>ABEE三鷹店のLINE予約アプリの使い方をまとめました。初めての方の登録から、ご予約・キャンセルの手順まで、このページだけで確認いただけます。</p>
+  </div>
+
+  <div class="notice">
+    <div class="label">ご利用になれない方</div>
+    <p>下記に当てはまる方は、本アプリでのご予約はできません。お手数ですが店舗までお電話ください。</p>
+    <ul>
+      <li>当店へのご来店が初めての方</li>
+      <li>トリマー指名をご希望の方</li>
+      <li>大型犬・多頭飼いの方</li>
+    </ul>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <span class="no">STEP 1–5</span>
+      <h2>はじめてご利用の方 — 初回登録</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <div class="body">
+          <h3>LINEで予約アプリを開く</h3>
+          <p>ABEE三鷹店のLINE公式アカウントから、予約メニューをタップしてアプリを開きます。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div class="body">
+          <h3>利用規約に同意する</h3>
+          <p>利用規約と個人情報の取り扱いについての内容をご確認のうえ、2つのチェックボックスに同意してください。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div class="body">
+          <h3>初回登録用パスワードを入力</h3>
+          <p>既存のお客様限定でご利用いただくための確認用パスワードです。</p>
+          <span class="hint">パスワードは店頭スタッフにお尋ねください</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <div class="body">
+          <h3>携帯電話番号を入力</h3>
+          <p>ご登録済みの携帯電話番号を、ハイフンなしで入力します（例：09012345678）。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">5</div>
+        <div class="body">
+          <h3>届いたSMSの認証コードを入力</h3>
+          <p>入力した番号宛に4桁の認証コードがSMSで届きます。画面に入力すると初回登録が完了します。</p>
+          <span class="hint">コードが届かない場合は「コードを再送する」をタップ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock">
+      <div class="mock-head">ペットサロンABEE</div>
+      <div class="mock-body">
+        <div class="mock-card">
+          <p class="mock-p">090••••••••◦◦ 宛に認証コードを<br>送信しました。SMSに記載の<br>4桁のコードを入力してください。</p>
+          <div class="mock-pin"><span>7</span><span>2</span><span>9</span><span>4</span></div>
+        </div>
+        <div class="mock-btn">認証する</div>
+        <div class="mock-link">コードを再送する</div>
+      </div>
+    </div>
+    <p class="mock-caption">SMS認証コードの入力画面</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="no">STEP 1–4</span>
+      <h2>ご予約の流れ</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <div class="body">
+          <h3>ホーム画面で「新規予約」をタップ</h3>
+          <p>登録済みの方は、アプリを開くとすぐにホーム画面（現在の予約一覧）が表示されます。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div class="body">
+          <h3>ペットを選択</h3>
+          <p>ご登録済みのペットの中から、今回ご来店されるペットを選びます。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div class="body">
+          <h3>希望の日時を選択</h3>
+          <p>カレンダーから空いている日時を選びます。「前週」「翌週」ボタンで表示する週を切り替えられます。</p>
+          <div class="slots"><span>10:00</span><span>13:00</span><span>16:00</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <div class="body">
+          <h3>連絡事項を入力して確定</h3>
+          <p>気になることがあれば連絡事項欄にご記入のうえ、「予約する」をタップして完了です。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mock">
+      <div class="mock-head">ペットサロンABEE</div>
+      <div class="mock-body">
+        <div class="mock-card">
+          <div class="mock-cal-nav"><span class="pill">前週</span><b>9/14 〜 9/20</b><span class="pill">翌週</span></div>
+          <table class="mock-cal">
+            <tr><th></th><th>10:00</th><th>13:00</th><th>16:00</th></tr>
+            <tr><td>9/16（水）</td><td class="ok"><span>予約</span></td><td class="no">×</td><td class="ok"><span>予約</span></td></tr>
+            <tr><td>9/17（木）</td><td class="no">×</td><td class="ok"><span>予約</span></td><td class="ok"><span>予約</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <p class="mock-caption">空き状況カレンダーの画面</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="no">確認・変更</span>
+      <h2>予約の確認・キャンセル</h2>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3><span class="dot"></span>予約の確認</h3>
+        <p>ホーム画面に現在のご予約が一覧表示されます。予約をタップすると、日時やペットなどの詳細を確認できます。</p>
+      </div>
+      <div class="info-card">
+        <h3><span class="dot"></span>キャンセルについて</h3>
+        <p>予約詳細画面から、予約日の<strong style="color:var(--red)">3日前まで</strong>キャンセル手続きが可能です（キャンセル理由の入力が必要です）。3日前を過ぎた場合や、当日キャンセルの際はお電話にてご連絡ください。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="contact-card">
+      <div class="name">ABEE 三鷹店</div>
+      <div class="addr">〒181-0014 東京都三鷹市野崎2-8-1 クラウンビル104</div>
+      <div class="tel-row">
+        <span class="num" id="tel-num">0422-30-5392</span>
+        <button class="copy-btn" id="copy-btn" type="button">コピー</button>
+      </div>
+    </div>
+    <p class="foot-note">ご不明な点やアプリ対象外のご予約は、お気軽にお電話ください。</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var btn = document.getElementById('copy-btn');
+    var num = document.getElementById('tel-num').textContent;
+    btn.addEventListener('click', function(){
+      function fallback(){
+        var r = document.createRange();
+        r.selectNode(document.getElementById('tel-num'));
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(num).then(function(){
+          btn.textContent = 'コピーしました';
+          setTimeout(function(){ btn.textContent = 'コピー'; }, 1800);
+        }).catch(fallback);
+      } else {
+        fallback();
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
